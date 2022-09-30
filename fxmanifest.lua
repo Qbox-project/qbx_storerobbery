@@ -1,18 +1,20 @@
 fx_version 'cerulean'
 game 'gta5'
 
-description 'QB-StoreRobbery'
 version '1.0.0'
+repository 'https://github.com/QBCore-Remastered/qb-storerobbery'
 
 ui_page 'html/index.html'
 
 shared_scripts {
     'config.lua',
     '@qb-core/shared/locale.lua',
-    'locales/en.lua', -- Change to the language you want
+    'locales/en.lua',
+    'locales/*.lua',
+    '@ox_lib/init.lua'
 }
-client_script 'client/main.lua'
-server_script 'server/main.lua'
+client_script 'client.lua'
+server_script 'server.lua'
 
 files {
     'html/index.html',
