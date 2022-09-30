@@ -22,7 +22,7 @@ local function OpeningRegisterHandler(LockpickTime)
     TaskPlayAnim(cache.ped, OpenRegisterDict, OpenRegisterAnim, 3.0, 3.0, -1, 16, 0, false, false, false)
     CreateThread(function()
         while OpeningRegister do
-            TaskPlayAnim(cache.ped, OpenRegisterDict, OpenRegisterAnim, 3.0, 3.0, -1, 16, 0, 0, 0, 0)
+            TaskPlayAnim(cache.ped, OpenRegisterDict, OpenRegisterAnim, 3.0, 3.0, -1, 16, 0, false, false, false)
             Wait(2000)
             LockpickTime = LockpickTime - 2000
             TriggerServerEvent('qb-storerobbery:server:openregister', false)
@@ -119,7 +119,7 @@ RegisterNUICallback('success', function(_, cb)
     cb('ok')
 end)
 
-RegisterNUICallback('fail', function(_ ,cb)
+RegisterNUICallback('fail', function(_, cb)
     StartLockpick(false)
     if not QBCore.Functions.IsWearingGloves() then
         local FingerDropChance = math.random(0, 30) and IsUsingAdvanced or math.random(0, 60)
@@ -168,7 +168,7 @@ end)
 
 RegisterNUICallback('CombinationFail', function(_, cb)
     local SoundId = GetSoundId()
-    PlaySound(SoundId, 'Place_Prop_Fail', 'DLC_Dmod_Prop_Editor_Sounds', 0, 0, 1)
+    PlaySound(SoundId, 'Place_Prop_Fail', 'DLC_Dmod_Prop_Editor_Sounds', false, 0, true)
     ReleaseSoundId(SoundId)
     cb('ok')
 end)

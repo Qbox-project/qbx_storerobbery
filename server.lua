@@ -46,7 +46,7 @@ RegisterNetEvent('lockpicks:UseLockpick', function(PlayerSource, IsAdvanced)
 
     if not ClosestRegisterIndex then return end
     if Config.Registers[ClosestRegisterIndex].robbed then return end
-    if Amount < Config.MinimumCops then if Config.NotEnoughCopsNotify then QBCore.Functions.Notify(PlayerSource, Lang:t('error.no_police', {Required = Config.MinimumCops}), 'error') end return end
+    if Amount < Config.MinimumCops then if Config.NotEnoughCopsNotify then QBCore.Functions.Notify(PlayerSource, Lang:t('error.no_police', { Required = Config.MinimumCops }), 'error') end return end
 
     StartedRegister[PlayerSource] = true
     Config.Registers[ClosestRegisterIndex].robbed = true
@@ -64,10 +64,10 @@ RegisterNetEvent('qb-storerobbery:server:failedregister', function(IsUsingAdvanc
     Config.Registers[ClosestRegisterIndex].robbed = false
     if DeleteChance < math.random(0, 100) then
         QBCore.Functions.Notify(source, Lang:t('error.lockpick_broken'), 'error')
-        if IsUsingAdvanced then 
+        if IsUsingAdvanced then
             Player.Functions.RemoveItem('advancedlockpick', 1)
             TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items['advancedlockpick'], 'remove')
-        else 
+        else
             Player.Functions.RemoveItem('lockpick', 1)
             TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items['lockpick'], 'remove')
         end
@@ -90,7 +90,7 @@ RegisterNetEvent('qb-storerobbery:server:openregister', function(IsDone)
     if not ClosestRegisterIndex then return end
     if #(PlayerCoords - Config.Registers[ClosestRegisterIndex].coords) > 2 then return end
     if not StartedRegister[source] then return end
-    if Amount < Config.MinimumCops then if Config.NotEnoughCopsNotify then QBCore.Functions.Notify(source, Lang:t('error.no_police', {Required = Config.MinimumCops}), 'error') end return end
+    if Amount < Config.MinimumCops then if Config.NotEnoughCopsNotify then QBCore.Functions.Notify(source, Lang:t('error.no_police', { Required = Config.MinimumCops }), 'error') end return end
 
     Player.Functions.AddMoney('cash', math.random(Config.RegisterReward.Min, Config.RegisterReward.Max))
 
@@ -102,11 +102,11 @@ RegisterNetEvent('qb-storerobbery:server:openregister', function(IsDone)
         local Info
         if Config.Safes[Config.Registers[ClosestRegisterIndex].safeKey].type == 'keypad' then
             Info = {
-                label = Lang:t('text.safe_code')..tostring(Code)
+                label = Lang:t('text.safe_code') .. tostring(Code)
             }
         else
             Info = {
-                label = Lang:t('text.safe_code')..tostring(math.floor((Code[1] % 360) / 3.60)).."-"..tostring(math.floor((Code[2] % 360) / 3.60)).."-"..tostring(math.floor((Code[3] % 360) / 3.60)).."-"..tostring(math.floor((Code[4] % 360) / 3.60)).."-"..tostring(math.floor((Code[5] % 360) / 3.60))
+                label = Lang:t('text.safe_code') .. tostring(math.floor((Code[1] % 360) / 3.60)) .. "-" .. tostring(math.floor((Code[2] % 360) / 3.60)) .. "-" .. tostring(math.floor((Code[3] % 360) / 3.60)) .. "-" .. tostring(math.floor((Code[4] % 360) / 3.60)) .. "-" .. tostring(math.floor((Code[5] % 360) / 3.60))
             }
         end
         Player.Functions.AddItem('stickynote', 1, false, Info)
@@ -147,11 +147,11 @@ RegisterNetEvent('qb-storerobbery:server:successsafe', function()
     if not ClosestSafeIndex then return end
     if not StartedSafe[source] then return end
 
-	local Info = {
-		worth = math.random(Config.SafeReward.MarkedBillsWorth.Min, Config.SafeReward.MarkedBillsWorth.Max)
-	}
-	Player.Functions.AddItem('markedbills', math.random(Config.SafeReward.MarkedBillsAmount.Min, Config.SafeReward.MarkedBillsAmount.Max), false, Info)
-	TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items['markedbills'], 'add')
+    local Info = {
+        worth = math.random(Config.SafeReward.MarkedBillsWorth.Min, Config.SafeReward.MarkedBillsWorth.Max)
+    }
+    Player.Functions.AddItem('markedbills', math.random(Config.SafeReward.MarkedBillsAmount.Min, Config.SafeReward.MarkedBillsAmount.Max), false, Info)
+    TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items['markedbills'], 'add')
 
     if Config.SafeReward.ChanceAtSpecial < math.random(0, 100) then
         Player.Functions.AddItem('rolex', math.random(Config.SafeReward.RolexAmount.Min, Config.SafeReward.RolexAmount.Max))
@@ -177,26 +177,25 @@ CreateThread(function()
     while true do
         SafeCodes = {
             [1] = math.random(1000, 9999),
-            [2] = {math.random(1, 149), math.random(500.0, 600.0), math.random(360.0, 400), math.random(600.0, 900.0)},
-            [3] = {math.random(150, 359), math.random(-300.0, -60.0), math.random(0, 100), math.random(-500.0, -160.0)},
+            [2] = { math.random(1, 149), math.random(500.0, 600.0), math.random(360.0, 400), math.random(600.0, 900.0) },
+            [3] = { math.random(150, 359), math.random(-300.0, -60.0), math.random(0, 100), math.random(-500.0, -160.0) },
             [4] = math.random(1000, 9999),
             [5] = math.random(1000, 9999),
-            [6] = {math.random(1, 149), math.random(150.0, 200.0), math.random(100, 140), math.random(150.0, 220.0), math.random(-100, 100), math.random(140, 300)},
+            [6] = { math.random(1, 149), math.random(150.0, 200.0), math.random(100, 140), math.random(150.0, 220.0), math.random(-100, 100), math.random(140, 300) },
             [7] = math.random(1000, 9999),
             [8] = math.random(1000, 9999),
             [9] = math.random(1000, 9999),
-            [10] = {math.random(1, 149), math.random(300.0, 500.0), math.random(200, 260), math.random(500.0, 800.0), math.random(300, 440), math.random(650, 900)},
+            [10] = { math.random(1, 149), math.random(300.0, 500.0), math.random(200, 260), math.random(500.0, 800.0), math.random(300, 440), math.random(650, 900) },
             [11] = math.random(1000, 9999),
             [12] = math.random(1000, 9999),
             [13] = math.random(1000, 9999),
-            [14] = {math.random(150, 450), math.random(-360.0, 0.0), math.random(360, 720)},
+            [14] = { math.random(150, 450), math.random(-360.0, 0.0), math.random(360, 720) },
             [15] = math.random(1000, 9999),
             [16] = math.random(1000, 9999),
             [17] = math.random(1000, 9999),
-            [18] = {math.random(150, 450), math.random(1.0, 100.0), math.random(360, 450), math.random(300.0, 340.0), math.random(350, 400), math.random(320.0, 340.0), math.random(350, 600)},
+            [18] = { math.random(150, 450), math.random(1.0, 100.0), math.random(360, 450), math.random(300.0, 340.0), math.random(350, 400), math.random(320.0, 340.0), math.random(350, 600) },
             [19] = math.random(1000, 9999),
         }
-        print(SafeCodes[1])
         Wait(Config.SafeRefresh.Min)
     end
 end)
