@@ -72,6 +72,10 @@ Config.Registers = {
     [30] = { coords = vector3(-161.07, 6321.23, 31.5), robbed = false, time = 0, safeKey = 18, camId = 27 },
     [31] = { coords = vector3(160.52, 6641.74, 31.6), robbed = false, time = 0, safeKey = 19, camId = 28 },
     [32] = { coords = vector3(162.16, 6643.22, 31.6), robbed = false, time = 0, safeKey = 19, camId = 29 },
+    [33] = { coords = vector3(1696.67, 4924.37, 42.06), robbed = false, time = 0, safeKey = 20, camId = 35 },
+    [34] = { coords = vector3(1698.28, 4923.32, 42.06), robbed = false, time = 0, safeKey = 20, camId = 35 },
+    [35] = { coords = vector3(2554.86, 381.21, 108.62), robbed = false, time = 0, safeKey = 21, camId = 36 },
+    [36] = { coords = vector3(2557.23, 381.23, 108.62), robbed = false, time = 0, safeKey = 21, camId = 36 },
 }
 
 Config.Safes = {
@@ -94,4 +98,6 @@ Config.Safes = {
     [17] = { coords = vector3(1734.78, 6420.84, 35.03), type = "keypad", robbed = false, camId = 20 },
     [18] = { coords = vector3(-168.40, 6318.80, 30.58), type = "padlock", robbed = false, camId = 27 },
     [19] = { coords = vector3(168.95, 6644.74, 31.70), type = "keypad", robbed = false, camId = 30 },
+    [20] = { coords = vector3(1707.9, 4920.49, 42.06), type = "keypad", robbed = false, camId = 35 },
+    [21] = { coords = vector3(2549.19, 384.83, 108.62), type = "keypad", robbed = false, camId = 36 },
 }
