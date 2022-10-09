@@ -58,7 +58,7 @@ RegisterNetEvent('qb-storerobbery:server:failedregister', function(IsUsingAdvanc
     local Player = QBCore.Functions.GetPlayer(source)
     local PlayerCoords = GetEntityCoords(GetPlayerPed(source))
     local ClosestRegisterIndex = GetClosestRegister(PlayerCoords)
-    local DeleteChance = math.random(0, 30) and IsUsingAdvanced or math.random(0, 60)
+    local DeleteChance = IsUsingAdvanced and math.random(0, 30) or math.random(0, 60)
 
     StartedRegister[source] = false
     Config.Registers[ClosestRegisterIndex].robbed = false
