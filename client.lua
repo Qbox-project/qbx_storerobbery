@@ -123,7 +123,7 @@ RegisterNUICallback('fail', function(_, cb)
     StartLockpick(false)
     if not QBCore.Functions.IsWearingGloves() then
         local FingerDropChance = IsUsingAdvanced and math.random(0, 30) or math.random(0, 60)
-        if FingerDropChance < math.random(0, 100) then TriggerServerEvent('evidence:server:CreateFingerDrop', GetEntityCoords(cache.ped)) end
+        if FingerDropChance > math.random(0, 100) then TriggerServerEvent('evidence:server:CreateFingerDrop', GetEntityCoords(cache.ped)) end
     end
     TriggerServerEvent('qb-storerobbery:server:failedregister', IsUsingAdvanced)
     cb('ok')

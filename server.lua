@@ -97,7 +97,7 @@ RegisterNetEvent('qb-storerobbery:server:openregister', function(IsDone)
     if not IsDone then return end
 
     TriggerClientEvent('qb-storerobbery:client:syncconfig', -1, Config)
-    if Config.RegisterReward.ChanceAtSticky < math.random(0, 100) then
+    if Config.RegisterReward.ChanceAtSticky > math.random(0, 100) then
         local Code = SafeCodes[Config.Registers[ClosestRegisterIndex].safeKey]
         local Info
         if Config.Safes[Config.Registers[ClosestRegisterIndex].safeKey].type == 'keypad' then
@@ -153,10 +153,10 @@ RegisterNetEvent('qb-storerobbery:server:successsafe', function()
     Player.Functions.AddItem('markedbills', math.random(Config.SafeReward.MarkedBillsAmount.Min, Config.SafeReward.MarkedBillsAmount.Max), false, Info)
     TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items['markedbills'], 'add')
 
-    if Config.SafeReward.ChanceAtSpecial < math.random(0, 100) then
+    if Config.SafeReward.ChanceAtSpecial > math.random(0, 100) then
         Player.Functions.AddItem('rolex', math.random(Config.SafeReward.RolexAmount.Min, Config.SafeReward.RolexAmount.Max))
         TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items['rolex'], 'add')
-        if Config.SafeReward.ChanceAtSpecial / 2 < math.random(0, 100) then
+        if Config.SafeReward.ChanceAtSpecial / 2 > math.random(0, 100) then
             Player.Functions.AddItem('goldbar', Config.SafeReward.GoldbarAmount)
             TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items['goldbar'], 'add')
         end
