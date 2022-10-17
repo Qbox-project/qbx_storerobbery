@@ -175,7 +175,7 @@ RegisterNetEvent('qb-storerobbery:server:successsafe', function()
 end)
 
 AddEventHandler('playerJoining', function(source)
-    TriggerClientEvent('qb-storerobbery:client:syncconfig', source, Config)
+    TriggerClientEvent('qb-storerobbery:client:syncconfig', source, Config.Registers, Config.Safes)
 end)
 
 CreateThread(function()
