@@ -42,7 +42,7 @@ end
 RegisterNetEvent('lockpicks:UseLockpick', function(PlayerSource, IsAdvanced)
     local PlayerCoords = GetEntityCoords(GetPlayerPed(PlayerSource))
     local ClosestRegisterIndex = GetClosestRegister(PlayerCoords)
-    local Players, Amount = QBCore.Functions.GetPlayersOnDuty('police')
+    local Amount = QBCore.Functions.GetDutyCountType('leo')
 
     if not ClosestRegisterIndex then return end
     if Config.Registers[ClosestRegisterIndex].robbed then return end
@@ -62,7 +62,7 @@ RegisterNetEvent('qb-storerobbery:server:failedregister', function(IsUsingAdvanc
 
     StartedRegister[source] = false
     Config.Registers[ClosestRegisterIndex].robbed = false
-    if DeleteChance < math.random(0, 100) then
+    if DeleteChance > math.random(0, 100) then
         QBCore.Functions.Notify(source, Lang:t('error.lockpick_broken'), 'error')
         if IsUsingAdvanced then
             Player.Functions.RemoveItem('advancedlockpick', 1)
@@ -85,7 +85,7 @@ RegisterNetEvent('qb-storerobbery:server:openregister', function(IsDone)
     local Player = QBCore.Functions.GetPlayer(source)
     local PlayerCoords = GetEntityCoords(GetPlayerPed(source))
     local ClosestRegisterIndex = GetClosestRegister(PlayerCoords)
-    local Players, Amount = QBCore.Functions.GetPlayersOnDuty('police')
+    local Amount = QBCore.Functions.GetDutyCountType('leo')
 
     if not ClosestRegisterIndex then return end
     if #(PlayerCoords - Config.Registers[ClosestRegisterIndex].coords) > 2 then return end
