@@ -113,7 +113,7 @@ RegisterNUICallback('success', function(_, cb)
         TriggerServerEvent('qb-storerobbery:server:openregister', true)
     end, function() -- Cancel
         OpeningRegister = false
-        TriggerServerEvent('qb-storerobbery:server:exitedregister')
+        TriggerServerEvent('qb-storerobbery:server:cancelledregister')
         QBCore.Functions.Notify(Lang:t('error.process_canceled'), 'error')
     end)
     cb('ok')
@@ -135,8 +135,9 @@ RegisterNUICallback('exit', function(_, cb)
     cb('ok')
 end)
 
-RegisterNetEvent('qb-storerobbery:client:syncconfig', function(Data)
-    Config = Data
+RegisterNetEvent('qb-storerobbery:client:syncconfig', function(Registers, Safes)
+    Config.Registers = Registers
+    Config.Safes = Safes
 end)
 
 RegisterNetEvent('qb-storerobbery:client:trysafe', function(ClosestSafeIndex, Combination)

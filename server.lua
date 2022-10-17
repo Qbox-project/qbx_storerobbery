@@ -81,6 +81,11 @@ RegisterNetEvent('qb-storerobbery:server:exitedregister', function()
     Config.Registers[ClosestRegisterIndex].robbed = false
 end)
 
+RegisterNetEvent('qb-storerobbery:server:cancelledregister', function()
+    StartedRegister[source] = false
+    TriggerClientEvent('qb-storerobbery:client:syncconfig', -1, Config.Registers, Config.Safes)
+end)
+
 RegisterNetEvent('qb-storerobbery:server:openregister', function(IsDone)
     local Player = QBCore.Functions.GetPlayer(source)
     local PlayerCoords = GetEntityCoords(GetPlayerPed(source))
@@ -96,7 +101,7 @@ RegisterNetEvent('qb-storerobbery:server:openregister', function(IsDone)
 
     if not IsDone then return end
 
-    TriggerClientEvent('qb-storerobbery:client:syncconfig', -1, Config)
+    TriggerClientEvent('qb-storerobbery:client:syncconfig', -1, Config.Registers, Config.Safes)
     if Config.RegisterReward.ChanceAtSticky > math.random(0, 100) then
         local Code = SafeCodes[Config.Registers[ClosestRegisterIndex].safeKey]
         local Info
@@ -116,7 +121,7 @@ RegisterNetEvent('qb-storerobbery:server:openregister', function(IsDone)
     StartedRegister[source] = false
     SetTimeout(math.random(Config.RegisterRefresh.Min, Config.RegisterRefresh.Max), function()
         Config.Registers[ClosestRegisterIndex].robbed = false
-        TriggerClientEvent('qb-storerobbery:client:syncconfig', -1, Config)
+        TriggerClientEvent('qb-storerobbery:client:syncconfig', -1, Config.Registers, Config.Safes)
     end)
 end)
 
@@ -162,10 +167,10 @@ RegisterNetEvent('qb-storerobbery:server:successsafe', function()
         end
     end
     StartedSafe[source] = false
-    TriggerClientEvent('qb-storerobbery:client:syncconfig', -1, Config)
+    TriggerClientEvent('qb-storerobbery:client:syncconfig', -1, Config.Registers, Config.Safes)
     SetTimeout(math.random(Config.SafeRefresh.Min, Config.SafeRefresh.Max), function()
         Config.Safes[ClosestSafeIndex].robbed = false
-        TriggerClientEvent('qb-storerobbery:client:syncconfig', -1, Config)
+        TriggerClientEvent('qb-storerobbery:client:syncconfig', -1, Config.Registers, Config.Safes)
     end)
 end)
 
@@ -189,3 +194,5 @@ CreateThread(function()
         Wait(Config.SafeRefresh.Min)
     end
 end)
+
+lib.versionCheck('Qbox-project/qb-storerobbery')
