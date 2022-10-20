@@ -1,7 +1,7 @@
 fx_version 'cerulean'
 game 'gta5'
 
-version '1.0.0'
+version '1.1.0'
 repository 'https://github.com/QBCore-Remastered/qb-storerobbery'
 
 ui_page 'html/index.html'

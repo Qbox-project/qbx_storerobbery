@@ -42,6 +42,20 @@ local function SafeAnim()
     TaskPlayAnim(cache.ped, 'amb@prop_human_bum_bin@idle_b', 'exit', 8.0, 8.0, -1, 50, 0, false, false, false)
 end
 
+local function DrawText3D(coords, text)
+    SetTextScale(0.35, 0.35)
+    SetTextFont(4)
+    SetTextColour(255, 255, 255, 215)
+    BeginTextCommandDisplayText("STRING")
+    SetTextCentre(true)
+    AddTextComponentSubstringPlayerName(text)
+    SetDrawOrigin(coords.x, coords.y, coords.z, 0)
+    EndTextCommandDisplayText(0.0, 0.0)
+    local factor = (string.len(text)) / 370
+    DrawRect(0.0, 0.0 + 0.0125, 0.017 + factor, 0.03, 0, 0, 0, 75)
+    ClearDrawOrigin()
+end
+
 CreateThread(function()
     local HasShownText
     while true do
@@ -55,7 +69,7 @@ CreateThread(function()
                 if Config.UseDrawText then
                     if not HasShownText then HasShownText = true exports['qb-core']:DrawText(Lang:t('text.register_empty')) end
                 else
-                    QBCore.Functions.DrawText3D(Config.Registers[i].coords, Lang:t('text.register_empty'))
+                    DrawText3D(Config.Registers[i].coords, Lang:t('text.register_empty'))
                 end
             end
         end
@@ -86,7 +100,7 @@ CreateThread(function()
                 if Config.UseDrawText then
                     if not HasShownText then HasShownText = true exports['qb-core']:DrawText(Text) end
                 else
-                    QBCore.Functions.DrawText3D(Config.Safes[i].coords, Text)
+                    DrawText3D(Config.Safes[i].coords, Text)
                 end
             end
         end
