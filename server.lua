@@ -39,7 +39,7 @@ local function PoliceAlert(Text, Source)
     end)
 end
 
-RegisterNetEvent('lockpicks:UseLockpick', function(PlayerSource, IsAdvanced)
+AddEventHandler('lockpicks:UseLockpick', function(PlayerSource, IsAdvanced)
     local PlayerCoords = GetEntityCoords(GetPlayerPed(PlayerSource))
     local ClosestRegisterIndex = GetClosestRegister(PlayerCoords)
     local Amount = QBCore.Functions.GetDutyCountType('leo')
