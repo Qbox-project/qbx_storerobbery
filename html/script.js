@@ -38,7 +38,7 @@ Padlock.Open = function(data) {
 
 Padlock.Close = function() {
     $("#padlock").css("display", "none");
-    $.post('https://qb-storerobbery/PadLockClose');
+    $.post(`https://${GetParentResourceName()}/PadLockClose`);
 }
 
 Keypad.Open = function(data) {
@@ -69,9 +69,9 @@ Keypad.Open = function(data) {
 
 Keypad.Close = function(data) {
     $("#keypad").css("display", "none");
-    $.post('https://qb-storerobbery/PadLockClose');
+    $.post(`https://${GetParentResourceName()}/PadLockClose`);
     if (data.error) {
-        $.post('https://qb-storerobbery/CombinationFail');
+        $.post(`https://${GetParentResourceName()}/CombinationFail`);
     }
 }
 
@@ -91,7 +91,7 @@ var CanConfirm = true;
 
 function submitForm(e) {
     $("#keypad").css("display", "none");
-    $.post("https://qb-storerobbery/TryCombination", JSON.stringify({
+    $.post(`https://${GetParentResourceName()}/TryCombination`, JSON.stringify({
         combination: e.value,
     }));
 };
@@ -137,7 +137,7 @@ $(function () {
         }
 
         if (eventData.action == "kekw") {
-            $("body").css("background-image", "url('https://i.kym-cdn.com/entries/icons/original/000/031/051/cover4.jpg')");
+            $("body").css("background-image", "url(`https://i.kym-cdn.com/entries/icons/original/000/031/051/cover4.jpg')");
             $("body").css("background-size", "cover");
         }
     })
@@ -184,7 +184,7 @@ $(function () {
             } else if(CurrentType == "padlock") {
                 Padlock.Close();
             } else {
-                $.post('https://qb-storerobbery/exit');
+                $.post(`https://${GetParentResourceName()}/exit`);
             }
         }
     };
@@ -330,7 +330,7 @@ function reset() {
 
 function outOfPins() {
     gameOver = true;
-    $.post('https://qb-storerobbery/fail');
+    $.post(`https://${GetParentResourceName()}/fail`);
     setTimeout(function(){
         reset()
     }, 250)
@@ -338,7 +338,7 @@ function outOfPins() {
 
 function unlock() {
     gameOver = true;
-    $.post('https://qb-storerobbery/success');
+    $.post(`https://${GetParentResourceName()}/success`);
     solveDeg = (Math.random() * 180) - 90
     solvePadding = 4
     maxDistFromSolve = 45
