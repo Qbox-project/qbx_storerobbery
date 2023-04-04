@@ -1,4 +1,4 @@
-local QBCore = exports['qb-core']:GetCoreObject()
+local QBCore = exports['qbx-core']:GetCoreObject()
 local IsUsingAdvanced
 local OpeningRegister
 local OpenRegisterDict = 'veh@break_in@0h@p_m_one@'
@@ -67,13 +67,13 @@ CreateThread(function()
                 WaitTime = 0
                 Nearby = true
                 if Config.UseDrawText then
-                    if not HasShownText then HasShownText = true exports['qb-core']:DrawText(Lang:t('text.register_empty')) end
+                    if not HasShownText then HasShownText = true exports['qbx-core']:DrawText(Lang:t('text.register_empty')) end
                 else
                     DrawText3D(Config.Registers[i].coords, Lang:t('text.register_empty'))
                 end
             end
         end
-        if not Nearby and HasShownText then HasShownText = false exports['qb-core']:HideText() end
+        if not Nearby and HasShownText then HasShownText = false exports['qbx-core']:HideText() end
         Wait(WaitTime)
     end
 end)
@@ -98,13 +98,13 @@ CreateThread(function()
                     end
                 end
                 if Config.UseDrawText then
-                    if not HasShownText then HasShownText = true exports['qb-core']:DrawText(Text) end
+                    if not HasShownText then HasShownText = true exports['qbx-core']:DrawText(Text) end
                 else
                     DrawText3D(Config.Safes[i].coords, Text)
                 end
             end
         end
-        if not Nearby and HasShownText then HasShownText = false exports['qb-core']:HideText() end
+        if not Nearby and HasShownText then HasShownText = false exports['qbx-core']:HideText() end
         Wait(WaitTime)
     end
 end)
