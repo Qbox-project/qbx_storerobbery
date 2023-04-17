@@ -60,9 +60,9 @@ Keypad.Open = function(data) {
             "<input type='button' class='PINbutton' name='8' value='8' id='8' onClick=addKeyPadNumber(this); />" +
             "<input type='button' class='PINbutton' name='9' value='9' id='9' onClick=addKeyPadNumber(this); />" +
             "<br>" +
-            "<input type='button' class='PINbutton clear' name='-' value='clear' id='-' onClick=clearForm(this); />" +
+            "<input type='button' class='PINbutton clear' name='-' value='＊' id='-' onClick=clearForm(this); />" +
             "<input type='button' class='PINbutton' name='0' value='0' id='0' onClick=addKeyPadNumber(this); />" +
-            "<input type='button' class='PINbutton enter' name='+' value='enter' id='+' onClick=submitForm(PINbox); />" +
+            "<input type='button' class='PINbutton enter' name='+' value='#' id='+' onClick=submitForm(PINbox); />" +
         "</form>"
     );
 }
