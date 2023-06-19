@@ -130,6 +130,7 @@ RegisterNetEvent('qb-storerobbery:server:trysafe', function()
     local ClosestSafeIndex = GetClosestSafe(PlayerCoords)
 
     if not ClosestSafeIndex then return end
+    if Amount < Config.MinimumCops then if Config.NotEnoughCopsNotify then QBCore.Functions.Notify(PlayerSource, Lang:t('error.no_police', { Required = Config.MinimumCops }), 'error') end return end
 
     Config.Safes[ClosestSafeIndex].robbed = true
     StartedSafe[source] = true
