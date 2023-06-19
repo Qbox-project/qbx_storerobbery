@@ -46,7 +46,10 @@ AddEventHandler('lockpicks:UseLockpick', function(PlayerSource, IsAdvanced)
 
     if not ClosestRegisterIndex then return end
     if Config.Registers[ClosestRegisterIndex].robbed then return end
-    if Amount < Config.MinimumCops then if Config.NotEnoughCopsNotify then QBCore.Functions.Notify(PlayerSource, Lang:t('error.no_police', { Required = Config.MinimumCops }), 'error') end return end
+    if Amount < Config.MinimumCops and Config.NotEnoughCopsNotify then    
+        QBCore.Functions.Notify(PlayerSource, Lang:t('error.no_police', { Required = Config.MinimumCops }), 'error')
+        return
+    end
 
     StartedRegister[PlayerSource] = true
     Config.Registers[ClosestRegisterIndex].robbed = true
@@ -95,7 +98,10 @@ RegisterNetEvent('qb-storerobbery:server:openregister', function(IsDone)
     if not ClosestRegisterIndex then return end
     if #(PlayerCoords - Config.Registers[ClosestRegisterIndex].coords) > 2 then return end
     if not StartedRegister[source] then return end
-    if Amount < Config.MinimumCops then if Config.NotEnoughCopsNotify then QBCore.Functions.Notify(source, Lang:t('error.no_police', { Required = Config.MinimumCops }), 'error') end return end
+    if Amount < Config.MinimumCops and Config.NotEnoughCopsNotify then    
+        QBCore.Functions.Notify(PlayerSource, Lang:t('error.no_police', { Required = Config.MinimumCops }), 'error')
+        return
+    end
 
     Player.Functions.AddMoney('cash', math.random(Config.RegisterReward.Min, Config.RegisterReward.Max))
 
@@ -130,7 +136,10 @@ RegisterNetEvent('qb-storerobbery:server:trysafe', function()
     local ClosestSafeIndex = GetClosestSafe(PlayerCoords)
 
     if not ClosestSafeIndex then return end
-    if Amount < Config.MinimumCops then if Config.NotEnoughCopsNotify then QBCore.Functions.Notify(PlayerSource, Lang:t('error.no_police', { Required = Config.MinimumCops }), 'error') end return end
+    if Amount < Config.MinimumCops and Config.NotEnoughCopsNotify then    
+        QBCore.Functions.Notify(PlayerSource, Lang:t('error.no_police', { Required = Config.MinimumCops }), 'error')
+        return
+    end
 
     Config.Safes[ClosestSafeIndex].robbed = true
     StartedSafe[source] = true
