@@ -166,21 +166,18 @@ RegisterNetEvent('qb-storerobbery:server:successsafe', function()
     local Player = QBCore.Functions.GetPlayer(source)
     local PlayerCoords = GetEntityCoords(GetPlayerPed(source))
     local ClosestSafeIndex = GetClosestSafe(PlayerCoords)
+    local worthMarkedBills = math.random(Config.SafeReward.MarkedBillsWorth.Min, Config.SafeReward.MarkedBillsWorth.Max)
     local numMarkedBills = math.random(Config.SafeReward.MarkedBillsAmount.Min, Config.SafeReward.MarkedBillsAmount.Max)
 
     if not ClosestSafeIndex then return end
     if not StartedSafe[source] then return end
 
-    for i = 1, numMarkedBills do
-        local worth = math.random(Config.SafeReward.MarkedBillsWorth.Min, Config.SafeReward.MarkedBillsWorth.Max)
-        
-        local metadataInfo = {
-            worth = worth,
-            description = Lang:t('text.value', { value = worth })
-        }
+    local billsMeta = {
+        worth = worthMarkedBills,
+        description = Lang:t('text.value', { value = worthMarkedBills })
+    }
 
-        Player.Functions.AddItem('markedbills', 1, false, metadataInfo)
-    end
+    Player.Functions.AddItem('markedbills', numMarkedBills, false, billsMeta)
 
     if Config.SafeReward.ChanceAtSpecial > math.random(0, 100) then
         Player.Functions.AddItem('rolex', math.random(Config.SafeReward.RolexAmount.Min, Config.SafeReward.RolexAmount.Max))
