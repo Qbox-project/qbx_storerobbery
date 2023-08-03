@@ -180,7 +180,6 @@ RegisterNetEvent('qb-storerobbery:server:successsafe', function()
         }
 
         Player.Functions.AddItem('markedbills', 1, false, Info)
-        TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items['markedbills'], 'add')
     end
 
     if Config.SafeReward.ChanceAtSpecial > math.random(0, 100) then
