@@ -1,9 +1,9 @@
 local QBCore = exports['qbx-core']:GetCoreObject()
-local IsUsingAdvanced
-local OpeningRegister
-local OpenRegisterDict = 'veh@break_in@0h@p_m_one@'
-local OpenRegisterAnim = 'low_force_entry_ds'
-local CurrentCombination
+local isUsingAdvanced
+local openingRegister
+local openRegisterDict = 'veh@break_in@0h@p_m_one@'
+local openRegisterAnim = 'low_force_entry_ds'
+local currentCombination
 
 local function StartLockpick(bool)
     SetNuiFocus(bool, bool)
@@ -17,19 +17,19 @@ end
 local function LoadAnimDict(dict) while not HasAnimDictLoaded(dict) do RequestAnimDict(dict) Wait(0) end end
 
 local function OpeningRegisterHandler(LockpickTime)
-    OpeningRegister = true
-    LoadAnimDict(OpenRegisterDict)
-    TaskPlayAnim(cache.ped, OpenRegisterDict, OpenRegisterAnim, 3.0, 3.0, -1, 16, 0, false, false, false)
+    openingRegister = true
+    LoadAnimDict(openRegisterDict)
+    TaskPlayAnim(cache.ped, openRegisterDict, openRegisterAnim, 3.0, 3.0, -1, 16, 0, false, false, false)
     CreateThread(function()
-        while OpeningRegister do
-            TaskPlayAnim(cache.ped, OpenRegisterDict, OpenRegisterAnim, 3.0, 3.0, -1, 16, 0, false, false, false)
+        while openingRegister do
+            TaskPlayAnim(cache.ped, openRegisterDict, openRegisterAnim, 3.0, 3.0, -1, 16, 0, false, false, false)
             Wait(2000)
             LockpickTime = LockpickTime - 2000
             TriggerServerEvent('qb-storerobbery:server:openregister', false)
             TriggerServerEvent('hud:server:GainStress', math.random(1, 3))
             if LockpickTime <= 0 then
-                OpeningRegister = false
-                StopAnimTask(cache.ped, OpenRegisterDict, OpenRegisterAnim, 1.0)
+                openingRegister = false
+                StopAnimTask(cache.ped, openRegisterDict, openRegisterAnim, 1.0)
             end
         end
     end)
@@ -55,6 +55,14 @@ local function DrawText3D(coords, text)
     DrawRect(0.0, 0.0 + 0.0125, 0.017 + factor, 0.03, 0, 0, 0, 75)
     ClearDrawOrigin()
 end
+
+lib.callback.register('qbx-storerobbery:client:GetCurrentTime', function()
+    local chance = Config.PoliceAlertChance
+    if GetClockHours() >= 1 and GetClockHours() <= 6 then
+        chance = Config.PoliceNightAlertChance
+    end
+    return chance
+end)
 
 CreateThread(function()
     local HasShownText
@@ -110,7 +118,7 @@ CreateThread(function()
 end)
 
 RegisterNetEvent('qb-storerobbery:client:startRegister', function(IsAdvanced)
-    IsUsingAdvanced = IsAdvanced
+    isUsingAdvanced = IsAdvanced
     StartLockpick(true)
 end)
 
@@ -123,10 +131,10 @@ RegisterNUICallback('success', function(_, cb)
         disableMouse = false,
         disableCombat = true,
     }, {}, {}, {}, function() -- Done
-        OpeningRegister = false
+        openingRegister = false
         TriggerServerEvent('qb-storerobbery:server:openregister', true)
     end, function() -- Cancel
-        OpeningRegister = false
+        openingRegister = false
         TriggerServerEvent('qb-storerobbery:server:cancelledregister')
         QBCore.Functions.Notify(Lang:t('error.process_canceled'), 'error')
     end)
@@ -136,10 +144,10 @@ end)
 RegisterNUICallback('fail', function(_, cb)
     StartLockpick(false)
     if not QBCore.Functions.IsWearingGloves() then
-        local FingerDropChance = IsUsingAdvanced and math.random(0, 30) or math.random(0, 60)
+        local FingerDropChance = isUsingAdvanced and math.random(0, 30) or math.random(0, 60)
         if FingerDropChance > math.random(0, 100) then TriggerServerEvent('evidence:server:CreateFingerDrop', GetEntityCoords(cache.ped)) end
     end
-    TriggerServerEvent('qb-storerobbery:server:failedregister', IsUsingAdvanced)
+    TriggerServerEvent('qb-storerobbery:server:failedregister', isUsingAdvanced)
     cb('ok')
 end)
 
@@ -155,14 +163,14 @@ RegisterNetEvent('qb-storerobbery:client:syncconfig', function(Registers, Safes)
 end)
 
 RegisterNetEvent('qb-storerobbery:client:trysafe', function(ClosestSafeIndex, Combination)
-    CurrentCombination = Combination
+    currentCombination = Combination
     if Config.Safes[ClosestSafeIndex].type == 'keypad' then
         SendNUIMessage({
             action = 'openKeypad',
         })
         SetNuiFocus(true, true)
     else
-        TriggerEvent('SafeCracker:StartMinigame', CurrentCombination)
+        TriggerEvent('SafeCracker:StartMinigame', currentCombination)
     end
 end)
 
@@ -190,7 +198,7 @@ end)
 
 RegisterNUICallback('TryCombination', function(data, cb)
     SetNuiFocus(false, false)
-    if tonumber(data.combination) == CurrentCombination then
+    if tonumber(data.combination) == currentCombination then
         TriggerServerEvent('qb-storerobbery:server:successsafe')
         SendNUIMessage({
             action = "closeKeypad",
