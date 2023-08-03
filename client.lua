@@ -56,7 +56,7 @@ local function DrawText3D(coords, text)
     ClearDrawOrigin()
 end
 
-lib.callback.register('qbx-storerobbery:client:GetCurrentTime', function()
+lib.callback.register('qbx-storerobbery:client:getAlertChance', function()
     local chance = Config.PoliceAlertChance
     if GetClockHours() >= 1 and GetClockHours() <= 6 then
         chance = Config.PoliceNightAlertChance
