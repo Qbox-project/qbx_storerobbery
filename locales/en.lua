@@ -9,7 +9,8 @@ local Translations = {
         try_combination = "~g~E~w~ - Try Combination",
         safe_opened = "Safe Opened",
         emptying_the_register = "Emptying The Register..",
-        safe_code = "Safe Code: "
+        safe_code = "Safe Code: ",
+        value = "Value: $%{value}",
     },
     alert = {
         register = 'Someone is prying the register!',

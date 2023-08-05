@@ -30,30 +30,36 @@ local function GetClosestSafe(Coords)
     return ClosestSafeIndex
 end
 
-local function PoliceAlert(Text, Source)
-    if CalledCops[Source] then return end
-    CalledCops[Source] = true
-    TriggerEvent('police:server:policeAlert', Text)
+local function alertPolice(text, source, camId)
+    if CalledCops[source] then return end
+
+    local chance = lib.callback.await('qbx-storerobbery:client:getAlertChance', source)
+    if math.random() <= chance then
+        CalledCops[source] = true
+        TriggerEvent('police:server:policeAlert', text, camId, source)
+    end
+
     SetTimeout(Config.CallCopsTimeout, function()
-        CalledCops[Source] = false
+        CalledCops[source] = false
     end)
 end
 
 AddEventHandler('lockpicks:UseLockpick', function(PlayerSource, IsAdvanced)
     local PlayerCoords = GetEntityCoords(GetPlayerPed(PlayerSource))
     local ClosestRegisterIndex = GetClosestRegister(PlayerCoords)
-    local Amount = QBCore.Functions.GetDutyCountType('leo')
+    local leoCount = QBCore.Functions.GetDutyCountType('leo')
 
     if not ClosestRegisterIndex then return end
     if Config.Registers[ClosestRegisterIndex].robbed then return end
-    if Amount < Config.MinimumCops and Config.NotEnoughCopsNotify then    
+    if leoCount < Config.MinimumCops and Config.NotEnoughCopsNotify then
         QBCore.Functions.Notify(PlayerSource, Lang:t('error.no_police', { Required = Config.MinimumCops }), 'error')
         return
     end
 
     StartedRegister[PlayerSource] = true
     Config.Registers[ClosestRegisterIndex].robbed = true
-    PoliceAlert(Lang:t('alert.register'), PlayerSource)
+
+    alertPolice(Lang:t('alert.register'), PlayerSource, Config.Registers[ClosestRegisterIndex].camId)
     TriggerClientEvent('qb-storerobbery:client:startRegister', PlayerSource, IsAdvanced)
 end)
 
@@ -132,18 +138,20 @@ RegisterNetEvent('qb-storerobbery:server:openregister', function(IsDone)
 end)
 
 RegisterNetEvent('qb-storerobbery:server:trysafe', function()
-    local PlayerCoords = GetEntityCoords(GetPlayerPed(source))
+    local src = GetPlayerPed(source)
+    local PlayerCoords = GetEntityCoords(src)
     local ClosestSafeIndex = GetClosestSafe(PlayerCoords)
+    local leoCount = QBCore.Functions.GetDutyCountType('leo')
 
     if not ClosestSafeIndex then return end
-    if Amount < Config.MinimumCops and Config.NotEnoughCopsNotify then    
-        QBCore.Functions.Notify(PlayerSource, Lang:t('error.no_police', { Required = Config.MinimumCops }), 'error')
+    if leoCount < Config.MinimumCops and Config.NotEnoughCopsNotify then
+        QBCore.Functions.Notify(source, Lang:t('error.no_police', { Required = Config.MinimumCops }), 'error')
         return
     end
 
     Config.Safes[ClosestSafeIndex].robbed = true
     StartedSafe[source] = true
-    PoliceAlert(Lang:t('alert.safe'), source)
+    alertPolice(Lang:t('alert.safe'), source, Config.Safes[ClosestSafeIndex].camId)
     TriggerClientEvent('qb-storerobbery:client:trysafe', source, ClosestSafeIndex, SafeCodes[ClosestSafeIndex])
 end)
 
@@ -158,15 +166,18 @@ RegisterNetEvent('qb-storerobbery:server:successsafe', function()
     local Player = QBCore.Functions.GetPlayer(source)
     local PlayerCoords = GetEntityCoords(GetPlayerPed(source))
     local ClosestSafeIndex = GetClosestSafe(PlayerCoords)
+    local worthMarkedBills = math.random(Config.SafeReward.MarkedBillsWorth.Min, Config.SafeReward.MarkedBillsWorth.Max)
+    local numMarkedBills = math.random(Config.SafeReward.MarkedBillsAmount.Min, Config.SafeReward.MarkedBillsAmount.Max)
 
     if not ClosestSafeIndex then return end
     if not StartedSafe[source] then return end
 
-    local Info = {
-        worth = math.random(Config.SafeReward.MarkedBillsWorth.Min, Config.SafeReward.MarkedBillsWorth.Max)
+    local billsMeta = {
+        worth = worthMarkedBills,
+        description = Lang:t('text.value', { value = worthMarkedBills })
     }
-    Player.Functions.AddItem('markedbills', math.random(Config.SafeReward.MarkedBillsAmount.Min, Config.SafeReward.MarkedBillsAmount.Max), false, Info)
-    TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items['markedbills'], 'add')
+
+    Player.Functions.AddItem('markedbills', numMarkedBills, false, billsMeta)
 
     if Config.SafeReward.ChanceAtSpecial > math.random(0, 100) then
         Player.Functions.AddItem('rolex', math.random(Config.SafeReward.RolexAmount.Min, Config.SafeReward.RolexAmount.Max))

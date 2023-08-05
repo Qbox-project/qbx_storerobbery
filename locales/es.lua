@@ -9,8 +9,13 @@ local Translations = {
         try_combination = "~g~E~w~ - Ingresa la combinación",
         safe_opened = "Caja abierta",
         emptying_the_register= "Vaciando caja registradora..",
-        safe_code = "Código de seguridad: "
+        safe_code = "Código de seguridad: ",
+        value = "Valor: $%{value}"
     },
+    alert = {
+        register = '¡Alguien está en una registradora!',
+        safe = '¡Alguien está rompiendo una caja fuerte!'
+    }
 }
 
 if GetConvar('qb_locale', 'en') == 'es' then
