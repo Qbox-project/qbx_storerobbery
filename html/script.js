@@ -70,7 +70,7 @@ Keypad.Open = function(data) {
 Keypad.Close = function(data) {
     $("#keypad").css("display", "none");
     $.post(`https://${GetParentResourceName()}/PadLockClose`);
-    if (data.error) {
+    if (data?.error) {
         $.post(`https://${GetParentResourceName()}/CombinationFail`);
     }
 }
