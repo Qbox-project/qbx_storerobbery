@@ -104,8 +104,8 @@ RegisterNetEvent('qb-storerobbery:server:openregister', function(IsDone)
     if not ClosestRegisterIndex then return end
     if #(PlayerCoords - Config.Registers[ClosestRegisterIndex].coords) > 2 then return end
     if not StartedRegister[source] then return end
-    if Amount < Config.MinimumCops and Config.NotEnoughCopsNotify then    
-        exports.qbx_core:Notify(PlayerSource, Lang:t('error.no_police', {Required = Config.MinimumCops}), 'error')
+    if Amount < Config.MinimumCops and Config.NotEnoughCopsNotify then
+        exports.qbx_core:Notify(source, Lang:t('error.no_police', {Required = Config.MinimumCops}), 'error')
         return
     end
 

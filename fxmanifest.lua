@@ -19,10 +19,7 @@ shared_scripts {
 client_script 'client.lua'
 server_script 'server.lua'
 
-modules {
-    'qbx_core:playerdata',
-    'qbx_core:utils'
-}
+modules {'qbx_core:utils'}
 
 files {
     'html/index.html',
