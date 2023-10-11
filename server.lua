@@ -1,8 +1,8 @@
-local QBCore = exports['qbx-core']:GetCoreObject()
 local StartedRegister = {}
 local StartedSafe = {}
 local SafeCodes = {}
 local CalledCops = {}
+local ITEMS = exports.ox_inventory:Items()
 
 local function GetClosestRegister(Coords)
     local ClosestRegisterIndex
@@ -47,12 +47,12 @@ end
 AddEventHandler('lockpicks:UseLockpick', function(PlayerSource, IsAdvanced)
     local PlayerCoords = GetEntityCoords(GetPlayerPed(PlayerSource))
     local ClosestRegisterIndex = GetClosestRegister(PlayerCoords)
-    local leoCount = QBCore.Functions.GetDutyCountType('leo')
+    local leoCount = exports.qbx_core:GetDutyCountType('leo')
 
     if not ClosestRegisterIndex then return end
     if Config.Registers[ClosestRegisterIndex].robbed then return end
     if leoCount < Config.MinimumCops and Config.NotEnoughCopsNotify then
-        QBCore.Functions.Notify(PlayerSource, Lang:t('error.no_police', { Required = Config.MinimumCops }), 'error')
+        exports.qbx_core:Notify(PlayerSource, Lang:t('error.no_police', {Required = Config.MinimumCops}), 'error')
         return
     end
 
@@ -64,7 +64,7 @@ AddEventHandler('lockpicks:UseLockpick', function(PlayerSource, IsAdvanced)
 end)
 
 RegisterNetEvent('qb-storerobbery:server:failedregister', function(IsUsingAdvanced)
-    local Player = QBCore.Functions.GetPlayer(source)
+    local Player = exports.qbx_core:GetPlayer(source)
     local PlayerCoords = GetEntityCoords(GetPlayerPed(source))
     local ClosestRegisterIndex = GetClosestRegister(PlayerCoords)
     local DeleteChance = IsUsingAdvanced and math.random(0, 30) or math.random(0, 60)
@@ -72,13 +72,13 @@ RegisterNetEvent('qb-storerobbery:server:failedregister', function(IsUsingAdvanc
     StartedRegister[source] = false
     Config.Registers[ClosestRegisterIndex].robbed = false
     if DeleteChance > math.random(0, 100) then
-        QBCore.Functions.Notify(source, Lang:t('error.lockpick_broken'), 'error')
+        exports.qbx_core:Notify(source, Lang:t('error.lockpick_broken'), 'error')
         if IsUsingAdvanced then
             Player.Functions.RemoveItem('advancedlockpick', 1)
-            TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items['advancedlockpick'], 'remove')
+            TriggerClientEvent('inventory:client:ItemBox', source, ITEMS['advancedlockpick'], 'remove')
         else
             Player.Functions.RemoveItem('lockpick', 1)
-            TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items['lockpick'], 'remove')
+            TriggerClientEvent('inventory:client:ItemBox', source, ITEMS['lockpick'], 'remove')
         end
     end
 end)
@@ -96,16 +96,16 @@ RegisterNetEvent('qb-storerobbery:server:cancelledregister', function()
 end)
 
 RegisterNetEvent('qb-storerobbery:server:openregister', function(IsDone)
-    local Player = QBCore.Functions.GetPlayer(source)
+    local Player = exports.qbx_core:GetPlayer(source)
     local PlayerCoords = GetEntityCoords(GetPlayerPed(source))
     local ClosestRegisterIndex = GetClosestRegister(PlayerCoords)
-    local Amount = QBCore.Functions.GetDutyCountType('leo')
+    local Amount = exports.qbx_core:GetDutyCountType('leo')
 
     if not ClosestRegisterIndex then return end
     if #(PlayerCoords - Config.Registers[ClosestRegisterIndex].coords) > 2 then return end
     if not StartedRegister[source] then return end
     if Amount < Config.MinimumCops and Config.NotEnoughCopsNotify then    
-        QBCore.Functions.Notify(PlayerSource, Lang:t('error.no_police', { Required = Config.MinimumCops }), 'error')
+        exports.qbx_core:Notify(PlayerSource, Lang:t('error.no_police', {Required = Config.MinimumCops}), 'error')
         return
     end
 
@@ -127,7 +127,7 @@ RegisterNetEvent('qb-storerobbery:server:openregister', function(IsDone)
             }
         end
         Player.Functions.AddItem('stickynote', 1, false, Info)
-        TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items['stickynote'], 'add')
+        TriggerClientEvent('inventory:client:ItemBox', source, ITEMS['stickynote'], 'add')
     end
 
     StartedRegister[source] = false
@@ -141,11 +141,11 @@ RegisterNetEvent('qb-storerobbery:server:trysafe', function()
     local src = GetPlayerPed(source)
     local PlayerCoords = GetEntityCoords(src)
     local ClosestSafeIndex = GetClosestSafe(PlayerCoords)
-    local leoCount = QBCore.Functions.GetDutyCountType('leo')
+    local leoCount = exports.qbx_core:GetDutyCountType('leo')
 
     if not ClosestSafeIndex then return end
     if leoCount < Config.MinimumCops and Config.NotEnoughCopsNotify then
-        QBCore.Functions.Notify(source, Lang:t('error.no_police', { Required = Config.MinimumCops }), 'error')
+        exports.qbx_core:Notify(source, Lang:t('error.no_police', {Required = Config.MinimumCops}), 'error')
         return
     end
 
@@ -163,7 +163,7 @@ RegisterNetEvent('qb-storerobbery:server:failedsafe', function()
 end)
 
 RegisterNetEvent('qb-storerobbery:server:successsafe', function()
-    local Player = QBCore.Functions.GetPlayer(source)
+    local Player = exports.qbx_core:GetPlayer(source)
     local PlayerCoords = GetEntityCoords(GetPlayerPed(source))
     local ClosestSafeIndex = GetClosestSafe(PlayerCoords)
     local worthMarkedBills = math.random(Config.SafeReward.MarkedBillsWorth.Min, Config.SafeReward.MarkedBillsWorth.Max)
@@ -181,10 +181,10 @@ RegisterNetEvent('qb-storerobbery:server:successsafe', function()
 
     if Config.SafeReward.ChanceAtSpecial > math.random(0, 100) then
         Player.Functions.AddItem('rolex', math.random(Config.SafeReward.RolexAmount.Min, Config.SafeReward.RolexAmount.Max))
-        TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items['rolex'], 'add')
+        TriggerClientEvent('inventory:client:ItemBox', source, ITEMS['rolex'], 'add')
         if Config.SafeReward.ChanceAtSpecial / 2 > math.random(0, 100) then
             Player.Functions.AddItem('goldbar', Config.SafeReward.GoldbarAmount)
-            TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items['goldbar'], 'add')
+            TriggerClientEvent('inventory:client:ItemBox', source, ITEMS['goldbar'], 'add')
         end
     end
     StartedSafe[source] = false
@@ -215,5 +215,3 @@ CreateThread(function()
         Wait(Config.SafeRefresh.Min)
     end
 end)
-
-lib.versionCheck('Qbox-project/qb-storerobbery')
