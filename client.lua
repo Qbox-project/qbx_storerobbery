@@ -1,4 +1,3 @@
-local QBCore = exports['qbx-core']:GetCoreObject()
 local isUsingAdvanced
 local openingRegister
 local openRegisterDict = 'veh@break_in@0h@p_m_one@'
@@ -14,11 +13,9 @@ local function StartLockpick(bool)
     SetCursorLocation(0.5, 0.2)
 end
 
-local function LoadAnimDict(dict) while not HasAnimDictLoaded(dict) do RequestAnimDict(dict) Wait(0) end end
-
 local function OpeningRegisterHandler(LockpickTime)
     openingRegister = true
-    LoadAnimDict(openRegisterDict)
+    lib.requestAnimDict(openRegisterDict)
     TaskPlayAnim(cache.ped, openRegisterDict, openRegisterAnim, 3.0, 3.0, -1, 16, 0, false, false, false)
     CreateThread(function()
         while openingRegister do
@@ -36,24 +33,10 @@ local function OpeningRegisterHandler(LockpickTime)
 end
 
 local function SafeAnim()
-    LoadAnimDict('amb@prop_human_bum_bin@idle_b')
+    lib.requestAnimDict('amb@prop_human_bum_bin@idle_b')
     TaskPlayAnim(cache.ped, 'amb@prop_human_bum_bin@idle_b', 'idle_d', 8.0, 8.0, -1, 50, 0, false, false, false)
     Wait(2500)
     TaskPlayAnim(cache.ped, 'amb@prop_human_bum_bin@idle_b', 'exit', 8.0, 8.0, -1, 50, 0, false, false, false)
-end
-
-local function DrawText3D(coords, text)
-    SetTextScale(0.35, 0.35)
-    SetTextFont(4)
-    SetTextColour(255, 255, 255, 215)
-    BeginTextCommandDisplayText("STRING")
-    SetTextCentre(true)
-    AddTextComponentSubstringPlayerName(text)
-    SetDrawOrigin(coords.x, coords.y, coords.z, 0)
-    EndTextCommandDisplayText(0.0, 0.0)
-    local factor = (string.len(text)) / 370
-    DrawRect(0.0, 0.0 + 0.0125, 0.017 + factor, 0.03, 0, 0, 0, 75)
-    ClearDrawOrigin()
 end
 
 lib.callback.register('qbx-storerobbery:client:getAlertChance', function()
@@ -75,13 +58,20 @@ CreateThread(function()
                 WaitTime = 0
                 Nearby = true
                 if Config.UseDrawText then
-                    if not HasShownText then HasShownText = true exports['qbx-core']:DrawText(Lang:t('text.register_empty')) end
+                    if not HasShownText then
+                        HasShownText = true
+                        lib.showTextUI(Lang:t('text.register_empty'), {position = 'left-center'})
+                        exports['qbx-core']:DrawText()
+                    end
                 else
-                    DrawText3D(Config.Registers[i].coords, Lang:t('text.register_empty'))
+                    DrawText3D(Lang:t('text.register_empty'), Config.Registers[i].coords)
                 end
             end
         end
-        if not Nearby and HasShownText then HasShownText = false exports['qbx-core']:HideText() end
+        if not Nearby and HasShownText then
+            HasShownText = false
+            lib.hideTextUI()
+        end
         Wait(WaitTime)
     end
 end)
@@ -106,13 +96,16 @@ CreateThread(function()
                     end
                 end
                 if Config.UseDrawText then
-                    if not HasShownText then HasShownText = true exports['qbx-core']:DrawText(Text) end
+                    if not HasShownText then
+                        HasShownText = true
+                        lib.showTextUI(Text, {position = 'left-center'})
+                    end
                 else
-                    DrawText3D(Config.Safes[i].coords, Text)
+                    DrawText3D(Text, Config.Safes[i].coords)
                 end
             end
         end
-        if not Nearby and HasShownText then HasShownText = false exports['qbx-core']:HideText() end
+        if not Nearby and HasShownText then HasShownText = false lib.hideTextUI() end
         Wait(WaitTime)
     end
 end)
@@ -125,25 +118,31 @@ end)
 RegisterNUICallback('success', function(_, cb)
     StartLockpick(false)
     OpeningRegisterHandler(Config.OpenRegisterTime)
-    QBCore.Functions.Progressbar('search_register', Lang:t('text.emptying_the_register'), Config.OpenRegisterTime, false, true, {
-        disableMovement = true,
-        disableCarMovement = true,
-        disableMouse = false,
-        disableCombat = true,
-    }, {}, {}, {}, function() -- Done
+    if lib.progressBar({
+        duration = Config.OpenRegisterTime,
+        label = Lang:t('text.emptying_the_register'),
+        useWhileDead = false,
+        canCancel = true,
+        disable = {
+            move = true,
+            car = true,
+            mouse = false,
+            combat = true
+        }
+    }) then -- if completed
         openingRegister = false
         TriggerServerEvent('qb-storerobbery:server:openregister', true)
-    end, function() -- Cancel
+    else -- if canceled
         openingRegister = false
         TriggerServerEvent('qb-storerobbery:server:cancelledregister')
         QBCore.Functions.Notify(Lang:t('error.process_canceled'), 'error')
-    end)
+    end
     cb('ok')
 end)
 
 RegisterNUICallback('fail', function(_, cb)
     StartLockpick(false)
-    if not QBCore.Functions.IsWearingGloves() then
+    if not IsWearingGloves() then
         local FingerDropChance = isUsingAdvanced and math.random(0, 30) or math.random(0, 60)
         if FingerDropChance > math.random(0, 100) then TriggerServerEvent('evidence:server:CreateFingerDrop', GetEntityCoords(cache.ped)) end
     end
