@@ -1,11 +1,9 @@
 fx_version 'cerulean'
 game 'gta5'
 
-description 'QBX_Storerobbery'
+description 'qbx_storerobbery'
 repository 'https://github.com/Qbox-project/qbx_storerobbery'
-version '1.1.1'
-
-ui_page 'html/index.html'
+version '1.0.0'
 
 shared_scripts {
     '@ox_lib/init.lua',
@@ -13,13 +11,16 @@ shared_scripts {
     '@qbx_core/shared/locale.lua',
     'locales/en.lua',
     'locales/*.lua',
-    'configs/default.lua',
 }
 
-client_script 'client.lua'
-server_script 'server.lua'
+client_script 'client/main.lua'
+server_script 'server/main.lua'
+
+ui_page 'html/index.html'
 
 files {
+    'config/client.lua',
+    'config/shared.lua',
     'html/index.html',
     'html/script.js',
     'html/style.css',
