@@ -191,7 +191,7 @@ RegisterNetEvent('qb-storerobbery:server:successsafe', function()
     end
     StartedSafe[source] = false
     TriggerClientEvent('qb-storerobbery:client:syncconfig', -1, sharedConfig.registers, sharedConfig.safes)
-    SetTimeout(math.random(Config.afeRefresh.min, config.safeRefresh.wax), function()
+    SetTimeout(math.random(config.safeRefresh.min, config.safeRefresh.wax), function()
         sharedConfig.safes[ClosestSafeIndex].robbed = false
         TriggerClientEvent('qb-storerobbery:client:syncconfig', -1, sharedConfig.registers, sharedConfig.safes)
     end)
