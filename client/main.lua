@@ -1,3 +1,5 @@
+local config = require 'config.client'
+local sharedConfig = require 'config.shared'
 local isUsingAdvanced
 local openingRegister
 local openRegisterDict = 'veh@break_in@0h@p_m_one@'
@@ -40,9 +42,9 @@ local function SafeAnim()
 end
 
 lib.callback.register('qbx-storerobbery:client:getAlertChance', function()
-    local chance = Config.PoliceAlertChance
+    local chance = config.policeAlertChance
     if GetClockHours() >= 1 and GetClockHours() <= 6 then
-        chance = Config.PoliceNightAlertChance
+        chance = config.policeNightAlertChance
     end
     return chance
 end)
@@ -53,18 +55,18 @@ CreateThread(function()
         local PlayerCoords = GetEntityCoords(cache.ped)
         local WaitTime = 800
         local Nearby = false
-        for i = 1, #Config.Registers do
-            if #(PlayerCoords - Config.Registers[i].coords) <= 1.4 and Config.Registers[i].robbed then
+        for i = 1, #sharedConfig.registers do
+            if #(PlayerCoords - sharedConfig.registers[i].coords) <= 1.4 and sharedConfig.registers[i].robbed then
                 WaitTime = 0
                 Nearby = true
-                if Config.UseDrawText then
+                if config.useDrawText then
                     if not HasShownText then
                         HasShownText = true
                         lib.showTextUI(Lang:t('text.register_empty'), {position = 'left-center'})
                         exports['qbx-core']:DrawText()
                     end
                 else
-                    DrawText3D(Lang:t('text.register_empty'), Config.Registers[i].coords)
+                    DrawText3D(Lang:t('text.register_empty'), sharedConfig.registers[i].coords)
                 end
             end
         end
@@ -83,11 +85,11 @@ CreateThread(function()
         local WaitTime = 800
         local Nearby = false
         local Text
-        for i = 1, #Config.Safes do
-            if #(PlayerCoords - Config.Safes[i].coords) <= 1.4 then
+        for i = 1, #sharedConfig.safes do
+            if #(PlayerCoords - sharedConfig.safes[i].coords) <= 1.4 then
                 WaitTime = 0
                 Nearby = true
-                if Config.Safes[i].robbed then
+                if sharedConfig.safes[i].robbed then
                     Text = Lang:t('text.safe_opened')
                 else
                     Text = Lang:t('text.try_combination')
@@ -95,13 +97,13 @@ CreateThread(function()
                         TriggerServerEvent('qb-storerobbery:server:trysafe')
                     end
                 end
-                if Config.UseDrawText then
+                if config.useDrawText then
                     if not HasShownText then
                         HasShownText = true
                         lib.showTextUI(Text, {position = 'left-center'})
                     end
                 else
-                    DrawText3D(Text, Config.Safes[i].coords)
+                    DrawText3D(Text, sharedConfig.safes[i].coords)
                 end
             end
         end
@@ -117,9 +119,9 @@ end)
 
 RegisterNUICallback('success', function(_, cb)
     StartLockpick(false)
-    OpeningRegisterHandler(Config.OpenRegisterTime)
+    OpeningRegisterHandler(config.openRegisterTime)
     if lib.progressBar({
-        duration = Config.OpenRegisterTime,
+        duration = config.openRegisterTime,
         label = Lang:t('text.emptying_the_register'),
         useWhileDead = false,
         canCancel = true,
@@ -157,13 +159,13 @@ RegisterNUICallback('exit', function(_, cb)
 end)
 
 RegisterNetEvent('qb-storerobbery:client:syncconfig', function(Registers, Safes)
-    Config.Registers = Registers
-    Config.Safes = Safes
+    sharedConfig.registers = Registers
+    sharedConfig.safes = Safes
 end)
 
 RegisterNetEvent('qb-storerobbery:client:trysafe', function(ClosestSafeIndex, Combination)
     currentCombination = Combination
-    if Config.Safes[ClosestSafeIndex].type == 'keypad' then
+    if sharedConfig.safes[ClosestSafeIndex].type == 'keypad' then
         SendNUIMessage({
             action = 'openKeypad',
         })
