@@ -10,11 +10,11 @@ return {
     },
 
     registerRefresh = {
-        min = 420000,
-        max = 90000,
+        min = 90000,
+        max = 420000,
     },
 
-    SafeReward = {
+    safeReward = {
         markedBillsAmount = {
             min = 1,
             max = 3,
