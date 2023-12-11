@@ -38,7 +38,7 @@ Padlock.Open = function(data) {
 
 Padlock.Close = function() {
     $("#padlock").css("display", "none");
-    $.post(`https://${GetParentResourceName()}/PadLockClose`);
+    $.post(`https://${GetParentResourceName()}/padLockClose`);
 }
 
 Keypad.Open = function(data) {
@@ -69,9 +69,9 @@ Keypad.Open = function(data) {
 
 Keypad.Close = function(data) {
     $("#keypad").css("display", "none");
-    $.post(`https://${GetParentResourceName()}/PadLockClose`);
+    $.post(`https://${GetParentResourceName()}/padLockClose`);
     if (data?.error) {
-        $.post(`https://${GetParentResourceName()}/CombinationFail`);
+        $.post(`https://${GetParentResourceName()}/combinationFail`);
     }
 }
 
@@ -91,7 +91,7 @@ var CanConfirm = true;
 
 function submitForm(e) {
     $("#keypad").css("display", "none");
-    $.post(`https://${GetParentResourceName()}/TryCombination`, JSON.stringify({
+    $.post(`https://${GetParentResourceName()}/tryCombination`, JSON.stringify({
         combination: e.value,
     }));
 };
