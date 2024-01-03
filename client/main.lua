@@ -39,6 +39,14 @@ local function safeAnim()
     TaskPlayAnim(cache.ped, 'amb@prop_human_bum_bin@idle_b', 'exit', 8.0, 8.0, -1, 50, 0, false, false, false)
 end
 
+local function dropFingerprint()
+    if IsWearingGloves() then return end
+    if config.fingerprintChance > math.random(0, 100) then
+        local coords = GetEntityCoords(cache.ped)
+        TriggerServerEvent('evidence:server:CreateFingerDrop', coords)
+    end
+end
+
 RegisterNetEvent('qbx_storerobbery:client:initRegisterAttempt', function(isAdvanced)
     isUsingAdvanced = isAdvanced
     startLockpick(true)
@@ -105,10 +113,7 @@ end)
 
 RegisterNUICallback('fail', function(_, cb)
     startLockpick(false)
-    if not IsWearingGloves() then
-        local FingerDropChance = isUsingAdvanced and math.random(0, 30) or math.random(0, 60)
-        if FingerDropChance > math.random(0, 100) then TriggerServerEvent('evidence:server:CreateFingerDrop', GetEntityCoords(cache.ped)) end
-    end
+    dropFingerprint()
     TriggerServerEvent('qbx_storerobbery:server:registerFailed', isUsingAdvanced)
     cb('ok')
 end)
