@@ -3,7 +3,6 @@ local sharedConfig = require 'config.shared'
 local startedRegister = {}
 local startedSafe = {}
 local safeCodes = {}
-local calledCops = {}
 local ITEMS = exports.ox_inventory:Items()
 
 local function getClosestRegister(coords)
@@ -32,20 +31,6 @@ local function getClosestSafe(coords)
     return closestSafeIndex
 end
 
-local function alertPolice(text, source, camId)
-    if calledCops[source] then return end
-
-    local chance = lib.callback.await('qbx_storerobbery:client:getAlertChance', source)
-    if math.random() <= chance then
-        calledCops[source] = true
-        TriggerEvent('police:server:policeAlert', text, camId, source)
-    end
-
-    SetTimeout(config.callCopsTimeout, function()
-        calledCops[source] = false
-    end)
-end
-
 RegisterNetEvent('qbx_storerobbery:server:checkStatus', function()
     local coords = GetEntityCoords(GetPlayerPed(source))
     local closestRegisterIndex = getClosestRegister(coords)
@@ -55,9 +40,9 @@ RegisterNetEvent('qbx_storerobbery:server:checkStatus', function()
     local hasAdvanced = exports.ox_inventory:Search(source, 'count', 'advancedlockpick') > 0
 
     if hasLockpick then
-        TriggerClientEvent('qbx_storerobbery:client:initRegisterAttempt', source, hasAdvanced)
+        TriggerClientEvent('qbx_storerobbery:client:initRegisterAttempt', source, false)
     elseif hasAdvanced then
-        TriggerClientEvent('qbx_storerobbery:client:initRegisterAttempt', source, hasAdvanced)
+        TriggerClientEvent('qbx_storerobbery:client:initRegisterAttempt', source, true)
     else
         exports.qbx_core:Notify(source, 'You don\'t have the appropriate items', 'error')
     end
@@ -77,10 +62,8 @@ RegisterNetEvent('qbx_storerobbery:server:registerFailed', function(isUsingAdvan
     if removalChance > math.random(0, 100) then
         exports.qbx_core:Notify(source, Lang:t('error.lockpick_broken'), 'error')
         if isUsingAdvanced then
-            player.Functions.RemoveItem('advancedlockpick', 1)
             exports.ox_inventory:RemoveItem(source, 'advancedlockpick', 1)
         else
-            player.Functions.RemoveItem('lockpick', 1)
             exports.ox_inventory:RemoveItem(source, 'lockpick', 1)
         end
     end
