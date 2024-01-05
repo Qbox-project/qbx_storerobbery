@@ -46,48 +46,49 @@ local function alertPolice(text, source, camId)
     end)
 end
 
-AddEventHandler('lockpicks:UseLockpick', function(playerSource, isAdvanced)
-    local playerCoords = GetEntityCoords(GetPlayerPed(playerSource))
-    local closestRegisterIndex = getClosestRegister(playerCoords)
-    local leoCount = exports.qbx_core:GetDutyCountType('leo')
-
+RegisterNetEvent('qbx_storerobbery:server:checkStatus', function()
+    local coords = GetEntityCoords(GetPlayerPed(source))
+    local closestRegisterIndex = getClosestRegister(coords)
     if not closestRegisterIndex then return end
-    if sharedConfig.registers[closestRegisterIndex].robbed then return end
-    if leoCount < config.minimumCops and config.notEnoughCopsNotify then
-        exports.qbx_core:Notify(playerSource, Lang:t('error.no_police', {Required = config.minimumCops}), 'error')
-        return
+
+    local hasLockpick = exports.ox_inventory:Search(source, 'count', 'lockpick') > 0
+    local hasAdvanced = exports.ox_inventory:Search(source, 'count', 'advancedlockpick') > 0
+
+    if hasLockpick then
+        TriggerClientEvent('qbx_storerobbery:client:initRegisterAttempt', source, hasAdvanced)
+    elseif hasAdvanced then
+        TriggerClientEvent('qbx_storerobbery:client:initRegisterAttempt', source, hasAdvanced)
+    else
+        exports.qbx_core:Notify(source, 'You don\'t have the appropriate items', 'error')
     end
 
-    startedRegister[playerSource] = true
+    startedRegister[source] = true
     sharedConfig.registers[closestRegisterIndex].robbed = true
-
-    alertPolice(Lang:t('alert.register'), playerSource, sharedConfig.registers[closestRegisterIndex].camId)
-    TriggerClientEvent('qbx_storerobbery:client:initRegisterAttempt', playerSource, isAdvanced)
 end)
 
 RegisterNetEvent('qbx_storerobbery:server:registerFailed', function(isUsingAdvanced)
     local player = exports.qbx_core:GetPlayer(source)
-    local playerCoords = GetEntityCoords(GetPlayerPed(source))
-    local closestRegisterIndex = getClosestRegister(playerCoords)
-    local deleteChance = isUsingAdvanced and math.random(0, 30) or math.random(0, 60)
+    local coords = GetEntityCoords(GetPlayerPed(source))
+    local closestRegisterIndex = getClosestRegister(coords)
+    local removalChance = isUsingAdvanced and math.random(0, 30) or math.random(0, 60)
 
     startedRegister[source] = false
     sharedConfig.registers[closestRegisterIndex].robbed = false
-    if deleteChance > math.random(0, 100) then
+    if removalChance > math.random(0, 100) then
         exports.qbx_core:Notify(source, Lang:t('error.lockpick_broken'), 'error')
         if isUsingAdvanced then
             player.Functions.RemoveItem('advancedlockpick', 1)
-            TriggerClientEvent('inventory:client:ItemBox', source, ITEMS['advancedlockpick'], 'remove')
+            exports.ox_inventory:RemoveItem(source, 'advancedlockpick', 1)
         else
             player.Functions.RemoveItem('lockpick', 1)
-            TriggerClientEvent('inventory:client:ItemBox', source, ITEMS['lockpick'], 'remove')
+            exports.ox_inventory:RemoveItem(source, 'lockpick', 1)
         end
     end
 end)
 
 RegisterNetEvent('qbx_storerobbery:server:registerExited', function()
-    local playerCoords = GetEntityCoords(GetPlayerPed(source))
-    local closestRegisterIndex = getClosestRegister(playerCoords)
+    local coords = GetEntityCoords(GetPlayerPed(source))
+    local closestRegisterIndex = getClosestRegister(coords)
     startedRegister[source] = false
     sharedConfig.registers[closestRegisterIndex].robbed = false
 end)
@@ -98,22 +99,16 @@ RegisterNetEvent('qbx_storerobbery:server:registerCanceled', function()
 end)
 
 RegisterNetEvent('qbx_storerobbery:server:registerOpened', function(isDone)
+    if not isDone then return end
     local player = exports.qbx_core:GetPlayer(source)
-    local playerCoords = GetEntityCoords(GetPlayerPed(source))
-    local closestRegisterIndex = getClosestRegister(playerCoords)
-    local amount = exports.qbx_core:GetDutyCountType('leo')
+    local coords = GetEntityCoords(GetPlayerPed(source))
+    local closestRegisterIndex = getClosestRegister(coords)
 
     if not closestRegisterIndex then return end
-    if #(playerCoords - sharedConfig.registers[closestRegisterIndex].coords) > 2 then return end
+    if #(coords - sharedConfig.registers[closestRegisterIndex].coords) > 2 then return end
     if not startedRegister[source] then return end
-    if amount < config.minimumCops and config.notEnoughCopsNotify then
-        exports.qbx_core:Notify(source, Lang:t('error.no_police', {Required = config.minimumCops}), 'error')
-        return
-    end
 
     player.Functions.AddMoney('cash', math.random(config.registerReward.min, config.registerReward.max))
-
-    if not isDone then return end
 
     TriggerClientEvent('qbx_storerobbery:client:updatedRobbables', -1, sharedConfig.registers, sharedConfig.safes)
     if config.registerReward.chanceAtSticky > math.random(0, 100) then
@@ -128,8 +123,8 @@ RegisterNetEvent('qbx_storerobbery:server:registerOpened', function(isDone)
                 label = Lang:t('text.safe_code') .. tostring(math.floor((code[1] % 360) / 3.60)) .. "-" .. tostring(math.floor((code[2] % 360) / 3.60)) .. "-" .. tostring(math.floor((code[3] % 360) / 3.60)) .. "-" .. tostring(math.floor((code[4] % 360) / 3.60)) .. "-" .. tostring(math.floor((code[5] % 360) / 3.60))
             }
         end
-        player.Functions.AddItem('stickynote', 1, false, info)
-        TriggerClientEvent('inventory:client:ItemBox', source, ITEMS['stickynote'], 'add')
+
+        exports.ox_inventory:AddItem(source, 'stickynote', 1, info)
     end
 
     startedRegister[source] = false
@@ -199,6 +194,10 @@ end)
 
 AddEventHandler('playerJoining', function(source)
     TriggerClientEvent('qbx_storerobbery:client:updatedRobbables', source, sharedConfig.registers, sharedConfig.safes)
+end)
+
+lib.callback.register('qbx_storerobbery:server:leoCount', function()
+    return exports.qbx_core:GetDutyCountType('leo')
 end)
 
 CreateThread(function()

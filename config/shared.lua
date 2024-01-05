@@ -1,4 +1,5 @@
 return {
+    minimumCops = 0,
     registers = {
         [1] = {coords = vec3(-706.08, -915.42, 19.21), robbed = false, time = 0, safeKey = 1, camId = 1},
         [2] = {coords = vec3(-706.16, -913.5, 19.21), robbed = false, time = 0, safeKey = 1, camId = 1},

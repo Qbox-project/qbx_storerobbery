@@ -1,6 +1,4 @@
 return {
-    minimumCops = 2,
-    notEnoughCopsNotify = true,
     callCopsTimeout = 240000,
 
     registerReward = {
