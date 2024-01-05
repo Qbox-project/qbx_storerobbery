@@ -52,7 +52,6 @@ RegisterNetEvent('qbx_storerobbery:server:checkStatus', function()
 end)
 
 RegisterNetEvent('qbx_storerobbery:server:registerFailed', function(isUsingAdvanced)
-    local player = exports.qbx_core:GetPlayer(source)
     local coords = GetEntityCoords(GetPlayerPed(source))
     local closestRegisterIndex = getClosestRegister(coords)
     local removalChance = isUsingAdvanced and math.random(0, 30) or math.random(0, 60)
@@ -131,7 +130,6 @@ RegisterNetEvent('qbx_storerobbery:server:trySafe', function()
 
     sharedConfig.safes[closestSafeIndex].robbed = true
     startedSafe[source] = true
-    alertPolice(Lang:t('alert.safe'), source, sharedConfig.safes[closestSafeIndex].camId)
     TriggerClientEvent('qbx_storerobbery:client:initSafeAttempt', source, closestSafeIndex, safeCodes[closestSafeIndex])
 end)
 
