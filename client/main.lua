@@ -39,6 +39,32 @@ local function safeAnim()
     TaskPlayAnim(cache.ped, 'amb@prop_human_bum_bin@idle_b', 'exit', 8.0, 8.0, -1, 50, 0, false, false, false)
 end
 
+local function checkInteractStatus(register)
+    if sharedConfig.registers[register].robbed then
+        return false
+    end
+
+    local leoCount = lib.callback.await('qbx_storerobbery:server:leoCount', false)
+    if leoCount > sharedConfig.minimumCops then
+        return true
+    end
+
+    return false
+end
+
+local function alertPolice()
+    local hours = GetClockHours()
+    local chance = config.policeAlertChance
+
+    if IsWearingGloves() or hours >= 1 and hours <= 6 then
+        chance = config.policeNightAlertChance
+    end
+
+    if math.random() <= chance then
+        TriggerServerEvent('police:server:policeAlert')
+    end
+end
+
 local function dropFingerprint()
     if IsWearingGloves() then return end
     if config.fingerprintChance > math.random(0, 100) then
@@ -89,6 +115,7 @@ end)
 RegisterNUICallback('success', function(_, cb)
     startLockpick(false)
     openingRegisterHandler(config.openRegisterTime)
+    alertPolice()
     if lib.progressBar({
         duration = config.openRegisterTime,
         label = Lang:t('text.emptying_the_register'),
@@ -114,6 +141,7 @@ end)
 RegisterNUICallback('fail', function(_, cb)
     startLockpick(false)
     dropFingerprint()
+    alertPolice()
     TriggerServerEvent('qbx_storerobbery:server:registerFailed', isUsingAdvanced)
     cb('ok')
 end)
@@ -156,6 +184,36 @@ RegisterNUICallback('tryCombination', function(data, cb)
     cb('ok')
 end)
 
+local function createRegisters()
+    CreateThread(function()
+        for k, v in pairs(sharedConfig.registers) do
+            exports.ox_target:addBoxZone({
+                coords = v.coords,
+                size = vec3(1.5, 1.5, 1.5),
+                rotation = 0.0,
+                debug = config.debugPoly,
+                options = {
+                    {
+                        name = k..'_register',
+                        icon = 'cash-register',
+                        label = 'Open Register',
+                        canInteract = function()
+                            return checkInteractStatus(k)
+                        end,
+                        serverEvent = 'qbx_storerobbery:server:checkStatus',
+                    }
+                }
+            })
+        end
+    end)
+end
+
+AddEventHandler('onClientResourceStart', function(resource)
+    if resource ~= cache.resource then return end
+    createRegisters()
+end)
+
+-- Update so that the target doesnt show also
 CreateThread(function()
     local hasShownText
     while true do
