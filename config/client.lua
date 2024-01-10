@@ -1,5 +1,5 @@
 return {
-    debugPoly = true,
+    debugPoly = false,
     useDrawText = false,
     openRegisterTime = 24000,
     policeAlertChance = 0.70,
