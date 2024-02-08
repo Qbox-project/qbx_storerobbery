@@ -1,5 +1,6 @@
 return {
     minimumCops = 0,
+    notEnoughCopsNotify = true,
     registers = {
         [1] = {coords = vec3(-706.08, -915.42, 19.21), robbed = false, time = 0, safeKey = 1, camId = 1},
         [2] = {coords = vec3(-706.16, -913.5, 19.21), robbed = false, time = 0, safeKey = 1, camId = 1},
@@ -35,7 +36,7 @@ return {
         [32] = {coords = vec3(1165.9, 2710.81, 38.15), robbed = false, time = 0, safeKey = 19, camId = 32},
         [33] = {coords = vec3(-2966.46, 390.89, 15.04), robbed = false, time = 0, safeKey = 21, camId = 33},
 
-        
+
         -- Gabz MLOs
         --[[[1] = {coords = vec3(-706.08, -915.42, 19.21), robbed = false, time = 0, safeKey = 1, camId = 1},
         [2] = {coords = vec3(-706.16, -913.5, 19.21), robbed = false, time = 0, safeKey = 1, camId = 1},
