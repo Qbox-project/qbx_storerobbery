@@ -194,6 +194,6 @@ CreateThread(function()
                 print('[ERROR] Incorrect Safe type!')
             end
         end
-        Wait(config.safeRefresh.Min)
+        Wait(config.safeRefresh.min)
     end
 end)
