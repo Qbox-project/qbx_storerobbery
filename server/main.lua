@@ -3,7 +3,6 @@ local sharedConfig = require 'config.shared'
 local startedRegister = {}
 local startedSafe = {}
 local safeCodes = {}
-local ITEMS = exports.ox_inventory:Items()
 
 local function getClosestRegister(coords)
     local closestRegisterIndex
@@ -159,10 +158,8 @@ RegisterNetEvent('qbx_storerobbery:server:safeCracked', function()
 
     if config.safeReward.chanceAtSpecial > math.random(0, 100) then
         player.Functions.AddItem('rolex', math.random(config.safeReward.rolexAmount.min, config.safeReward.rolexAmount.max))
-        TriggerClientEvent('inventory:client:ItemBox', source, ITEMS['rolex'], 'add')
         if config.safeReward.chanceAtSpecial / 2 > math.random(0, 100) then
             player.Functions.AddItem('goldbar', config.safeReward.goldbarAmount)
-            TriggerClientEvent('inventory:client:ItemBox', source, ITEMS['goldbar'], 'add')
         end
     end
     startedSafe[source] = false
