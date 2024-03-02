@@ -232,7 +232,6 @@ CreateThread(function()
                     end
                 else
                     qbx.drawText3d({text = locale('text.register_empty'), coords = sharedConfig.registers[i].coords})
-
                 end
             end
         end
