@@ -56,7 +56,7 @@ local function alertPolice()
     local hours = GetClockHours()
     local chance = config.policeAlertChance
 
-    if IsWearingGloves() or hours >= 1 and hours <= 6 then
+    if qbx.isWearingGloves() or hours >= 1 and hours <= 6 then
         chance = config.policeNightAlertChance
     end
 
@@ -66,7 +66,7 @@ local function alertPolice()
 end
 
 local function dropFingerprint()
-    if IsWearingGloves() then return end
+    if qbx.isWearingGloves() then return end
     if config.fingerprintChance > math.random(0, 100) then
         local coords = GetEntityCoords(cache.ped)
         TriggerServerEvent('evidence:server:CreateFingerDrop', coords)
