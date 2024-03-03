@@ -56,7 +56,7 @@ local function alertPolice()
     local hours = GetClockHours()
     local chance = config.policeAlertChance
 
-    if IsWearingGloves() or hours >= 1 and hours <= 6 then
+    if qbx.isWearingGloves() or hours >= 1 and hours <= 6 then
         chance = config.policeNightAlertChance
     end
 
@@ -66,7 +66,7 @@ local function alertPolice()
 end
 
 local function dropFingerprint()
-    if IsWearingGloves() then return end
+    if qbx.isWearingGloves() then return end
     if config.fingerprintChance > math.random(0, 100) then
         local coords = GetEntityCoords(cache.ped)
         TriggerServerEvent('evidence:server:CreateFingerDrop', coords)
@@ -118,7 +118,7 @@ RegisterNUICallback('success', function(_, cb)
     alertPolice()
     if lib.progressBar({
         duration = config.openRegisterTime,
-        label = Lang:t('text.emptying_the_register'),
+        label = locale('text.emptying_the_register'),
         useWhileDead = false,
         canCancel = true,
         disable = {
@@ -133,7 +133,7 @@ RegisterNUICallback('success', function(_, cb)
     else -- if canceled
         openingRegister = false
         TriggerServerEvent('qbx_storerobbery:server:registerCanceled')
-        exports.qbx_core:Notify(Lang:t('error.process_canceled'), 'error')
+        exports.qbx_core:Notify(locale('error.process_canceled'), 'error')
     end
     cb('ok')
 end)
@@ -227,11 +227,11 @@ CreateThread(function()
                 if config.useDrawText then
                     if not hasShownText then
                         hasShownText = true
-                        lib.showTextUI(Lang:t('text.register_empty'), {position = 'left-center'})
+                        lib.showTextUI(locale('text.register_empty'), {position = 'left-center'})
                         exports['qbx-core']:DrawText()
                     end
                 else
-                    DrawText3D(Lang:t('text.register_empty'), sharedConfig.registers[i].coords)
+                    qbx.drawText3d({text = locale('text.register_empty'), coords = sharedConfig.registers[i].coords})
                 end
             end
         end
@@ -255,9 +255,9 @@ CreateThread(function()
                 time = 0
                 nearby = true
                 if sharedConfig.safes[i].robbed then
-                    text = Lang:t('text.safe_opened')
+                    text = locale('text.safe_opened')
                 else
-                    text = Lang:t('text.try_combination')
+                    text = locale('text.try_combination')
                     if IsControlJustPressed(0, 38) then
                         TriggerServerEvent('qbx_storerobbery:server:trySafe')
                     end
@@ -268,7 +268,7 @@ CreateThread(function()
                         lib.showTextUI(text, {position = 'left-center'})
                     end
                 else
-                    DrawText3D(text, sharedConfig.safes[i].coords)
+                    qbx.drawText3d({text = text, coords = sharedConfig.safes[i].coords})
                 end
             end
         end

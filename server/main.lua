@@ -3,7 +3,6 @@ local sharedConfig = require 'config.shared'
 local startedRegister = {}
 local startedSafe = {}
 local safeCodes = {}
-local ITEMS = exports.ox_inventory:Items()
 
 local function getClosestRegister(coords)
     local closestRegisterIndex
@@ -59,7 +58,7 @@ RegisterNetEvent('qbx_storerobbery:server:registerFailed', function(isUsingAdvan
     startedRegister[source] = false
     sharedConfig.registers[closestRegisterIndex].robbed = false
     if removalChance > math.random(0, 100) then
-        exports.qbx_core:Notify(source, Lang:t('error.lockpick_broken'), 'error')
+        exports.qbx_core:Notify(source, locale('error.lockpick_broken'), 'error')
         if isUsingAdvanced then
             exports.ox_inventory:RemoveItem(source, 'advancedlockpick', 1)
         else
@@ -98,11 +97,11 @@ RegisterNetEvent('qbx_storerobbery:server:registerOpened', function(isDone)
         local info
         if sharedConfig.safes[sharedConfig.registers[closestRegisterIndex].safeKey].type == 'keypad' then
             info = {
-                label = Lang:t('text.safe_code') .. tostring(code)
+                label = locale('text.safe_code') .. tostring(code)
             }
         else
             info = {
-                label = Lang:t('text.safe_code') .. tostring(math.floor((code[1] % 360) / 3.60)) .. "-" .. tostring(math.floor((code[2] % 360) / 3.60)) .. "-" .. tostring(math.floor((code[3] % 360) / 3.60)) .. "-" .. tostring(math.floor((code[4] % 360) / 3.60)) .. "-" .. tostring(math.floor((code[5] % 360) / 3.60))
+                label = locale('text.safe_code') .. tostring(math.floor((code[1] % 360) / 3.60)) .. "-" .. tostring(math.floor((code[2] % 360) / 3.60)) .. "-" .. tostring(math.floor((code[3] % 360) / 3.60)) .. "-" .. tostring(math.floor((code[4] % 360) / 3.60)) .. "-" .. tostring(math.floor((code[5] % 360) / 3.60))
             }
         end
 
@@ -124,7 +123,7 @@ RegisterNetEvent('qbx_storerobbery:server:trySafe', function()
 
     if not closestSafeIndex then return end
     if leoCount < sharedConfig.minimumCops and sharedConfig.notEnoughCopsNotify then
-        exports.qbx_core:Notify(source, Lang:t('error.no_police', {Required = config.minimumCops}), 'error')
+        exports.qbx_core:Notify(source, locale('error.no_police', {Required = config.minimumCops}), 'error')
         return
     end
 
@@ -152,17 +151,15 @@ RegisterNetEvent('qbx_storerobbery:server:safeCracked', function()
 
     local billsMeta = {
         worth = worthMarkedBills,
-        description = Lang:t('text.value', { value = worthMarkedBills })
+        description = locale('text.value', { value = worthMarkedBills })
     }
 
     player.Functions.AddItem('markedbills', numMarkedBills, false, billsMeta)
 
     if config.safeReward.chanceAtSpecial > math.random(0, 100) then
         player.Functions.AddItem('rolex', math.random(config.safeReward.rolexAmount.min, config.safeReward.rolexAmount.max))
-        TriggerClientEvent('inventory:client:ItemBox', source, ITEMS['rolex'], 'add')
         if config.safeReward.chanceAtSpecial / 2 > math.random(0, 100) then
             player.Functions.AddItem('goldbar', config.safeReward.goldbarAmount)
-            TriggerClientEvent('inventory:client:ItemBox', source, ITEMS['goldbar'], 'add')
         end
     end
     startedSafe[source] = false
