@@ -1,6 +1,6 @@
 {
     "error": {
-        "no_police": "Nedostatek policistů (%{Required} požadováno)",
+        "no_police": "Nedostatek policistů (%s požadováno)",
         "process_canceled": "Proces zrušen..",
         "lockpick_broken": "Zlomil(a) jste lomítko"
     },

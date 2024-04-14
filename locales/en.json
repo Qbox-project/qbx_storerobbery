@@ -1,6 +1,6 @@
 {
     "error": {
-        "no_police": "Not Enough Police (%{Required} Required)",
+        "no_police": "Not Enough Police (%s Required)",
         "process_canceled": "Process canceled..",
         "lockpick_broken": "You Broke The Lock Pick"
     },

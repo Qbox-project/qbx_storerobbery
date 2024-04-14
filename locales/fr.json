@@ -1,6 +1,6 @@
 {
     "error": {
-        "no_police": "Pas assez de policiers (%{Required} Requis)",
+        "no_police": "Pas assez de policiers (%s Requis)",
         "process_canceled": "Annulé..",
         "lockpick_broken": "Vous avez cassé l'outil de crochetage"
     },
