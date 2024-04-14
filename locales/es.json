@@ -1,6 +1,6 @@
 {
     "error": {
-        "no_police": "No hay suficientes policia (%{Required} son requeridos)",
+        "no_police": "No hay suficientes policia (%s son requeridos)",
         "process_canceled": "Proceso cancelado..",
         "lockpick_broken": "Has roto la ganzúa"
     },
