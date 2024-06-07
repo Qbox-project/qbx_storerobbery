@@ -10,7 +10,7 @@
         "safe_opened": "Cofre Aberto",
         "emptying_the_register": "A esvaziar a caixa registadora...",
         "safe_code": "Código do Cofre: ",
-        "value": "Valor: %{value}€"
+        "value": "Valor: %s€"
     },
     "alert": {
         "register": "Alguém está a forçar a caixa registadora!",

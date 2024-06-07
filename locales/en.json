@@ -10,7 +10,7 @@
         "safe_opened": "Safe Opened",
         "emptying_the_register": "Emptying The Register..",
         "safe_code": "Safe Code: ",
-        "value": "Value: $%{value}"
+        "value": "Value: $%s"
     },
     "alert": {
         "register": "Someone is prying the register!",
