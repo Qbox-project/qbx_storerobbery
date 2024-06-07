@@ -10,7 +10,7 @@
         "safe_opened": "Caja abierta",
         "emptying_the_register": "Vaciando caja registradora..",
         "safe_code": "Código de seguridad: ",
-        "value": "Valor: $%{value}"
+        "value": "Valor: $%s"
     },
     "alert": {
         "register": "¡Alguien está en una registradora!",

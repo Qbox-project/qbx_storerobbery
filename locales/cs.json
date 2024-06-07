@@ -10,7 +10,7 @@
         "safe_opened": "Trezor otevřen",
         "emptying_the_register": "Vyprazdňování pokladny..",
         "safe_code": "Kód trezoru: ",
-        "value": "Hodnota: $%{value}"
+        "value": "Hodnota: $%s"
     },
     "alert": {
         "register": "Někdo páčí pokladnu!",
