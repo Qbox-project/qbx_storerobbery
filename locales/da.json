@@ -1,0 +1,19 @@
+{
+    "error": {
+        "no_police": "Ikke nok politi (%s krævet)",
+        "process_canceled": "Processen annulleret..",
+        "lockpick_broken": "Du brækkede låsedirken"
+    },
+    "text": {
+        "register_empty": "Kasseapparatet er tomt",
+        "try_combination": "~g~E~w~ - Prøv kombination",
+        "safe_opened": "Pengeskabet er åbnet",
+        "emptying_the_register": "Tømmer kasseapparatet..",
+        "safe_code": "Pengeskabskode: ",
+        "value": "Værdi: DKK%s"
+    },
+    "alert": {
+        "register": "Nogen roder med et kasseapparatet!",
+        "safe": "Nogen bryder et pengeskabet op!"
+    }
+}
