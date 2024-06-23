@@ -15,11 +15,10 @@ end
 
 local function openingRegisterHandler(lockpickTime)
     openingRegister = true
-    lib.requestAnimDict('veh@break_in@0h@p_m_one@')
-    TaskPlayAnim(cache.ped, 'veh@break_in@0h@p_m_one@', 'low_force_entry_ds', 3.0, 3.0, -1, 16, 0, false, false, false)
+    lib.playAnim(cache.ped, 'veh@break_in@0h@p_m_one@', 'low_force_entry_ds', 3.0, 3.0, -1, 16, 0, false, false, false)
     CreateThread(function()
         while openingRegister do
-            TaskPlayAnim(cache.ped, 'veh@break_in@0h@p_m_one@', 'low_force_entry_ds', 3.0, 3.0, -1, 16, 0, false, false, false)
+            lib.playAnim(cache.ped, 'veh@break_in@0h@p_m_one@', 'low_force_entry_ds', 3.0, 3.0, -1, 16, 0, false, false, false)
             Wait(2000)
             lockpickTime = lockpickTime - 2000
             TriggerServerEvent('qbx_storerobbery:server:registerOpened', false)
@@ -37,6 +36,7 @@ local function safeAnim()
     TaskPlayAnim(cache.ped, 'amb@prop_human_bum_bin@idle_b', 'idle_d', 8.0, 8.0, -1, 50, 0, false, false, false)
     Wait(2500)
     TaskPlayAnim(cache.ped, 'amb@prop_human_bum_bin@idle_b', 'exit', 8.0, 8.0, -1, 50, 0, false, false, false)
+    RemoveAnimDict('amb@prop_human_bum_bin@idle_b')
 end
 
 local function checkInteractStatus(register)
