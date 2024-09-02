@@ -170,7 +170,7 @@ RegisterNetEvent('qbx_storerobbery:server:safeCracked', function()
     end)
 end)
 
-AddEventHandler('playerJoining', function(source)
+AddEventHandler('playerJoining', function()
     TriggerClientEvent('qbx_storerobbery:client:updatedRobbables', source, sharedConfig.registers, sharedConfig.safes)
 end)
 
