@@ -1,0 +1,19 @@
+{
+    "error": {
+        "no_police": "Policiais Insuficientes (%s Requeridos)",
+        "process_canceled": "Processo cancelado..",
+        "lockpick_broken": "Você Quebrou o Lock Pick"
+    },
+    "text": {
+        "register_empty": "A Caixa Registradora Está Vazia",
+        "try_combination": "~g~E~w~ - Tentar Combinação",
+        "safe_opened": "Cofre Aberto",
+        "emptying_the_register": "Esvaziando a Caixa Registradora..",
+        "safe_code": "Código do Cofre: ",
+        "value": "Valor: $%s"
+    },
+    "alert": {
+        "register": "Alguém está forçando a caixa registradora!",
+        "safe": "Alguém está arrombando o cofre!"
+    }
+}
