@@ -1,0 +1,19 @@
+{
+    "error": {
+        "no_police": "Nicht genug Polizei (%s erforderlich)",
+        "process_canceled": "Prozess abgebrochen..",
+        "lockpick_broken": "Du hast das Dietrich gebrochen"
+    },
+    "text": {
+        "register_empty": "Die Kasse ist leer",
+        "try_combination": "~g~E~w~ - Kombination versuchen",
+        "safe_opened": "Tresor geöffnet",
+        "emptying_the_register": "Kasse wird geleert..",
+        "safe_code": "Tresorcode: ",
+        "value": "Wert: $%s"
+    },
+    "alert": {
+        "register": "Jemand hebelt die Kasse auf!",
+        "safe": "Jemand knackt den Tresor!"
+    }
+}
