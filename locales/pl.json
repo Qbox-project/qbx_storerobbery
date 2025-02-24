@@ -1,0 +1,19 @@
+{
+    "error": {
+        "no_police": "Niewystarczająca liczba policjantów (wymagane %s)",
+        "process_canceled": "Proces anulowany..",
+        "lockpick_broken": "Złamano wytrych"
+    },
+    "text": {
+        "register_empty": "Kasa jest pusta",
+        "try_combination": "~g~E~w~ - Spróbuj kombinacji",
+        "safe_opened": "Sejf otwarty",
+        "emptying_the_register": "Opróżnianie kasy..",
+        "safe_code": "Kod sejfu: ",
+        "value": "Wartość: $%s"
+    },
+    "alert": {
+        "register": "Ktoś majstruje przy kasie!",
+        "safe": "Ktoś włamuje się do sejfu!"
+    }
+}
