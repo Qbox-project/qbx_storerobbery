@@ -33,9 +33,9 @@ end
 
 local function safeAnim()
     lib.requestAnimDict('amb@prop_human_bum_bin@idle_b')
-    TaskPlayAnim(cache.ped, 'amb@prop_human_bum_bin@idle_b', 'idle_d', 8.0, 8.0, -1, 50, 0, false, false, false)
+    lib.playAnim(cache.ped, 'amb@prop_human_bum_bin@idle_b', 'idle_d', 8.0, 8.0, -1, 50, 0, false, false, false)
     Wait(2500)
-    TaskPlayAnim(cache.ped, 'amb@prop_human_bum_bin@idle_b', 'exit', 8.0, 8.0, -1, 50, 0, false, false, false)
+    lib.playAnim(cache.ped, 'amb@prop_human_bum_bin@idle_b', 'exit', 8.0, 8.0, -1, 50, 0, false, false, false)
     RemoveAnimDict('amb@prop_human_bum_bin@idle_b')
 end
 
@@ -45,7 +45,7 @@ local function checkInteractStatus(register)
     end
 
     local leoCount = lib.callback.await('qbx_storerobbery:server:leoCount', false)
-    if leoCount > sharedConfig.minimumCops then
+    if leoCount >= sharedConfig.minimumCops then
         return true
     end
 
