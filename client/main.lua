@@ -15,10 +15,10 @@ end
 
 local function openingRegisterHandler(lockpickTime)
     openingRegister = true
-    lib.playAnim(cache.ped, 'veh@break_in@0h@p_m_one@', 'low_force_entry_ds', 3.0, 3.0, -1, 16, 0, false, false, false)
+    lib.requestAnimDict('veh@break_in@0h@p_m_one@')
     CreateThread(function()
         while openingRegister do
-            lib.playAnim(cache.ped, 'veh@break_in@0h@p_m_one@', 'low_force_entry_ds', 3.0, 3.0, -1, 16, 0, false, false, false)
+            TaskPlayAnim(cache.ped, 'veh@break_in@0h@p_m_one@', 'low_force_entry_ds', 3.0, 3.0, -1, 16, 0, false, false, false)
             Wait(2000)
             lockpickTime = lockpickTime - 2000
             TriggerServerEvent('qbx_storerobbery:server:registerOpened', false)
@@ -26,6 +26,7 @@ local function openingRegisterHandler(lockpickTime)
             if lockpickTime <= 0 then
                 openingRegister = false
                 StopAnimTask(cache.ped, 'veh@break_in@0h@p_m_one@', 'low_force_entry_ds', 1.0)
+                RemoveAnimDict('veh@break_in@0h@p_m_one@')
             end
         end
     end)
@@ -45,7 +46,7 @@ local function checkInteractStatus(register)
     end
 
     local leoCount = lib.callback.await('qbx_storerobbery:server:leoCount', false)
-    if leoCount > sharedConfig.minimumCops then
+    if leoCount >= sharedConfig.minimumCops then
         return true
     end
 
