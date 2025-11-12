@@ -15,7 +15,6 @@ end
 
 local function openingRegisterHandler(lockpickTime)
     openingRegister = true
-    lib.playAnim(cache.ped, 'veh@break_in@0h@p_m_one@', 'low_force_entry_ds', 3.0, 3.0, -1, 16, 0, false, false, false)
     CreateThread(function()
         while openingRegister do
             lib.playAnim(cache.ped, 'veh@break_in@0h@p_m_one@', 'low_force_entry_ds', 3.0, 3.0, -1, 16, 0, false, false, false)
@@ -33,9 +32,9 @@ end
 
 local function safeAnim()
     lib.requestAnimDict('amb@prop_human_bum_bin@idle_b')
-    lib.playAnim(cache.ped, 'amb@prop_human_bum_bin@idle_b', 'idle_d', 8.0, 8.0, -1, 50, 0, false, false, false)
+    TaskPlayAnim(cache.ped, 'amb@prop_human_bum_bin@idle_b', 'idle_d', 8.0, 8.0, -1, 50, 0, false, false, false)
     Wait(2500)
-    lib.playAnim(cache.ped, 'amb@prop_human_bum_bin@idle_b', 'exit', 8.0, 8.0, -1, 50, 0, false, false, false)
+    TaskPlayAnim(cache.ped, 'amb@prop_human_bum_bin@idle_b', 'exit', 8.0, 8.0, -1, 50, 0, false, false, false)
     RemoveAnimDict('amb@prop_human_bum_bin@idle_b')
 end
 
