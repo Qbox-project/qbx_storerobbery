@@ -1,0 +1,19 @@
+{
+    "error": {
+        "no_police": "警察が不足しています (%s 人必要)",
+        "process_canceled": "処理がキャンセルされました..",
+        "lockpick_broken": "ロックピックが壊れました"
+    },
+    "text": {
+        "register_empty": "レジは空です",
+        "try_combination": "~g~E~w~ - 組み合わせを試す",
+        "safe_opened": "金庫が開きました",
+        "emptying_the_register": "レジを空にしています..",
+        "safe_code": "金庫コード：",
+        "value": "金額：$%s"
+    },
+    "alert": {
+        "register": "誰かがレジをこじ開けています！",
+        "safe": "誰かが金庫を破ろうとしています！"
+    }
+}
