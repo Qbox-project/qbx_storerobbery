@@ -168,8 +168,8 @@ end)
 
 RegisterNUICallback('tryCombination', function(data, cb)
     SetNuiFocus(false, false)
-    if tonumber(data.combination) == currentCombination then
-        TriggerServerEvent('qbx_storerobbery:server:safeCracked')
+    local success = lib.callback.await('qbx_storerobbery:server:trySafeCombination', false, tonumber(data.combination))
+    if success then
         SendNUIMessage({
             action = "closeKeypad",
             error = false
