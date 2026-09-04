@@ -1,0 +1,19 @@
+{
+    "error": {
+        "no_police": "Niet genoeg politieagenten (%s vereist)",
+        "process_canceled": "Proces geannuleerd...",
+        "lockpick_broken": "Je lockpick is gebroken"
+    },
+    "text": {
+        "register_empty": "De kassa is leeg",
+        "try_combination": "~g~E~w~ - Probeer de combinatie",
+        "safe_opened": "Kluis geopend",
+        "emptying_the_register": "Kassa leeghalen...",
+        "safe_code": "Kluiscode: ",
+        "value": "Waarde: $%s"
+    },
+    "alert": {
+        "register": "Iemand probeert een kassa open te breken!",
+        "safe": "Iemand probeert een kluis te kraken!"
+    }
+}
